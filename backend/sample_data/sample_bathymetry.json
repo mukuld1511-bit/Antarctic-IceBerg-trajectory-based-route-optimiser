@@ -1,0 +1,39 @@
+{
+  "dataset": "GEBCO_2023 Grid Subsampled 0.5 deg",
+  "reference": "General Bathymetric Chart of the Oceans",
+  "safe_depth_contour_m": 50.0,
+  "features": [
+    {
+      "name": "Weddell Abyssal Plain",
+      "depth_range_m": [
+        3800,
+        4700
+      ],
+      "hazard": "NONE"
+    },
+    {
+      "name": "Berkner Bank / Continental Shelf",
+      "depth_range_m": [
+        150,
+        400
+      ],
+      "hazard": "ICEBERG_GROUNDING_ZONE"
+    },
+    {
+      "name": "South Scotia Ridge",
+      "depth_range_m": [
+        250,
+        950
+      ],
+      "hazard": "SUBMARINE_PINNACLES"
+    },
+    {
+      "name": "Astrid Ridge (Maitri Approach)",
+      "depth_range_m": [
+        300,
+        1200
+      ],
+      "hazard": "FAST_ICE_PINNING"
+    }
+  ]
+}
