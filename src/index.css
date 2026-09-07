@@ -1,0 +1,146 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme {
+  --color-chart-bg: #EEF3F6;
+  --color-panel: #FFFFFF;
+  --color-panel-dim: #F5FAFD;
+  --color-panel-low: #EFF4F7;
+  --color-panel-high: #E4E9EC;
+  --color-panel-highest: #DEE3E6;
+  --color-ink: #12202B;
+  --color-ink-muted: #57707E;
+  --color-hairline: #D7E1E8;
+  --color-hairline-subtle: #E4E9EC;
+  --color-outline: #6E797C;
+  --color-outline-variant: #BEC8CC;
+  --color-brass: #0E7C93;
+  --color-brass-hover: #0A5C6D;
+  --color-brass-dim: #004E5E;
+  --color-brass-light: #7CD3EC;
+  --color-brass-tint: #CCE6F7;
+  --color-brass-soft: #ECFAFF;
+  --color-caution: #A9700F;
+  --color-caution-dark: #7C5000;
+  --color-caution-light: #FFDDB5;
+  --color-caution-soft: #FFF6F0;
+  --color-danger: #B23A2F;
+  --color-danger-dark: #93000A;
+  --color-danger-light: #FFDAD6;
+  --color-safe: #059669;
+  --color-safe-dark: #047857;
+  --color-safe-light: #D1FAE5;
+  --color-ice-lead: #CCE6F7;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* Technical nautical hatch patterns from Stitch export */
+.hatch-pattern-light {
+  background-image: repeating-linear-gradient(45deg, rgba(0, 98, 117, 0.06) 0, rgba(0, 98, 117, 0.06) 1px, transparent 0, transparent 8px);
+}
+.hatch-pattern-medium {
+  background-image: repeating-linear-gradient(45deg, rgba(73, 98, 111, 0.12) 0, rgba(73, 98, 111, 0.12) 1.5px, transparent 0, transparent 5px);
+}
+.hatch-pattern-dense {
+  background-image: repeating-linear-gradient(-45deg, rgba(178, 58, 47, 0.16) 0, rgba(178, 58, 47, 0.16) 2px, transparent 0, transparent 4px);
+}
+
+/* Admiralty nautical graticule grid pattern */
+.bg-hydro-grid {
+  background-color: #EEF3F6;
+  background-image: 
+    linear-gradient(to right, #D7E1E8 1px, transparent 1px),
+    linear-gradient(to bottom, #D7E1E8 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+/* Material Symbols icon helper */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined', sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Light instrument-panel scrollbars — fits the British Admiralty light bridge UI */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #BEC8CC transparent;
+}
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #BEC8CC;
+  border-radius: 0px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #57707E;
+}
+
+::selection {
+  background-color: rgba(14, 124, 147, 0.22);
+  color: #12202B;
+}
+
+/* Visible keyboard focus ring in the brass-cyan accent */
+:focus-visible {
+  outline: 2px solid #0E7C93;
+  outline-offset: 2px;
+}
+
+/* Remove default Leaflet div-icon chrome for custom markers */
+.live-vessel-icon,
+.custom-station-pin {
+  background: none !important;
+  border: none !important;
+}
+
+/* Timeline & Simulation Radar Animation Utilities */
+@keyframes radar-pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.9;
+  }
+  70% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes sweep-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.animate-radar-pulse {
+  animation: radar-pulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+}
+
+.animate-sweep-shimmer {
+  animation: sweep-shimmer 2.2s ease-in-out infinite;
+}
+

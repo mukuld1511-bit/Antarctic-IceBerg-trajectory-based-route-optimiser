@@ -1,0 +1,6 @@
+{
+  "name": "Antarctic Sea-Ice & Navigation DSS",
+  "description": "AI-enabled decision support platform forecasting Antarctic sea-ice concentration, iceberg trajectories (Bigg et al. physics + ML residual), and fuel-efficient vessel route optimization for MoES / NCPOR.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
