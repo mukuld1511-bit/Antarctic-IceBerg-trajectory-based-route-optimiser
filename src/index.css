@@ -47,6 +47,29 @@
   background-image: repeating-linear-gradient(-45deg, rgba(178, 58, 47, 0.16) 0, rgba(178, 58, 47, 0.16) 2px, transparent 0, transparent 4px);
 }
 
+/* Modern Maritime Glassmorphic UI Utilities */
+.glass-dock {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(215, 225, 232, 0.88);
+  box-shadow: 0 10px 30px -5px rgba(18, 32, 43, 0.14), 0 0 1px 1px rgba(255, 255, 255, 0.8) inset;
+}
+
+.glass-drawer {
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(215, 225, 232, 0.95);
+  box-shadow: 0 12px 36px rgba(18, 32, 43, 0.12);
+}
+
+.glass-pill {
+  background: rgba(239, 244, 247, 0.88);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(215, 225, 232, 0.8);
+}
+
 /* Admiralty nautical graticule grid pattern */
 .bg-hydro-grid {
   background-color: #EEF3F6;
@@ -106,9 +129,12 @@
 
 /* Remove default Leaflet div-icon chrome for custom markers */
 .live-vessel-icon,
-.custom-station-pin {
+.custom-station-pin,
+.custom-iceberg-pin,
+.custom-iceberg-milestone {
   background: none !important;
   border: none !important;
+  box-shadow: none !important;
 }
 
 /* Timeline & Simulation Radar Animation Utilities */

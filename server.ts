@@ -13,12 +13,12 @@ const __dirname = path.dirname(__filename);
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
   app.use(express.json());
 
   // Helper to load sample fixtures from backend/sample_data
-  const sampleDataDir = path.join(__dirname, "backend", "sample_data");
+  const sampleDataDir = path.join(process.cwd(), "backend", "sample_data");
 
   function loadJsonFixture(filename: string, fallback: any) {
     try {
@@ -219,6 +219,67 @@ async function startServer() {
   app.get("/api/iceberg/list", (req, res) => {
     const icebergs = loadJsonFixture("sample_icebergs.json", []);
     res.json(icebergs);
+  });
+
+  // --- n8n Webhook Ingestion Endpoint for Automated Iceberg Sync ---
+  app.post("/api/iceberg/sync", (req, res) => {
+    const apiKey = req.headers["x-api-key"];
+    const expectedKey = process.env.INGEST_API_KEY || "antarctic-dss-secret-key";
+
+    if (process.env.NODE_ENV === "production" && apiKey !== expectedKey) {
+      return res.status(401).json({ error: "Unauthorized: Invalid x-api-key header" });
+    }
+
+    const payload = req.body;
+    let newIcebergs: any[] = [];
+
+    if (Array.isArray(payload)) {
+      newIcebergs = payload;
+    } else if (payload && Array.isArray(payload.icebergs)) {
+      newIcebergs = payload.icebergs;
+    } else if (payload && payload.iceberg_id) {
+      newIcebergs = [payload];
+    } else {
+      return res.status(400).json({ error: "Payload must be an array of icebergs or contain an 'icebergs' array key" });
+    }
+
+    try {
+      const filePath = path.join(sampleDataDir, "sample_icebergs.json");
+      let currentIcebergs: any[] = [];
+      if (fs.existsSync(filePath)) {
+        currentIcebergs = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+      }
+
+      const map = new Map<string, any>();
+      currentIcebergs.forEach((b) => map.set(b.iceberg_id.toUpperCase(), b));
+
+      newIcebergs.forEach((b) => {
+        if (b.iceberg_id) {
+          const id = b.iceberg_id.toUpperCase();
+          const existing = map.get(id) || {};
+          map.set(id, {
+            ...existing,
+            ...b,
+            iceberg_id: id,
+            last_observed: b.last_observed || new Date().toISOString()
+          });
+        }
+      });
+
+      const updatedList = Array.from(map.values());
+      fs.writeFileSync(filePath, JSON.stringify(updatedList, null, 2), "utf-8");
+
+      console.log(`[n8n Ingest] Successfully processed ${newIcebergs.length} icebergs via webhook. Total tracked: ${updatedList.length}`);
+      res.json({
+        status: "success",
+        synced_count: newIcebergs.length,
+        total_tracked: updatedList.length,
+        timestamp: new Date().toISOString()
+      });
+    } catch (err: any) {
+      console.error("[n8n Ingest] Error persisting iceberg updates:", err);
+      res.status(500).json({ error: "Failed to persist iceberg update", details: err.message });
+    }
   });
 
   // Iceberg Trajectory Prediction (Bigg et al. ODE + ML Residual)

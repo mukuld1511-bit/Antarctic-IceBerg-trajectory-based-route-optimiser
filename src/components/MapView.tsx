@@ -79,6 +79,7 @@ export const MapView: React.FC<MapViewProps> = ({
 
   // Viewport bounds for vessel culling — updated on map pan/zoom
   const [mapBounds, setMapBounds] = useState<L.LatLngBounds | null>(null);
+  const [showCameraPresets, setShowCameraPresets] = useState<boolean>(false);
 
   // Track animation state for drawing polyline
   const animatedRouteLineRef = useRef<L.Polyline | null>(null);
@@ -235,11 +236,15 @@ export const MapView: React.FC<MapViewProps> = ({
               ? "bg-[#059669] ring-4 ring-[#059669]/30"
               : isPort
               ? "bg-[#0E7C93] ring-4 ring-[#0E7C93]/30"
-              : "bg-[#57707E] ring-2 ring-[#57707E]/20"
-          } shadow-lg"></div>
-          <div class="absolute -top-5 whitespace-nowrap px-1.5 py-0.5 rounded bg-[#FFFFFF]/90 border border-[#D7E1E8] text-[9px] font-mono text-[#12202B] pointer-events-none">
-            ${st.name}
-          </div>
+              : "bg-[#57707E]/70 ring-1 ring-[#57707E]/20"
+          } shadow-sm"></div>
+          ${
+            isMaitriOrBharati || isPort
+              ? `<div class="absolute -top-5 whitespace-nowrap px-1.5 py-0.5 rounded bg-[#FFFFFF]/95 border border-[#D7E1E8] text-[9px] font-mono font-bold text-[#12202B] pointer-events-none shadow-xs">
+                  ${st.name}
+                </div>`
+              : ""
+          }
         </div>
       `;
 
@@ -311,11 +316,11 @@ export const MapView: React.FC<MapViewProps> = ({
 
       // Canvas-rendered circleMarker — single shared renderer, no DOM overhead
       const marker = L.circleMarker([v.lat, v.lon], {
-        radius: 3.5,
+        radius: 5,
         fillColor: color,
-        fillOpacity: 0.85,
+        fillOpacity: 0.9,
         color: "#fff",
-        weight: 0.8,
+        weight: 1.2,
         renderer: canvasRendererRef.current || L.canvas()
       });
 
@@ -818,11 +823,12 @@ export const MapView: React.FC<MapViewProps> = ({
         `);
         destMarker.addTo(group);
 
-        // Smoothly fit map bounds to display the full updated route
+        // Smoothly fit map bounds to display the full updated route with panel clearance
         if (mapRef.current && validRec.length > 1) {
           const routeBounds = L.latLngBounds(validRec.map((wp) => [wp.lat, wp.lon]));
           mapRef.current.flyToBounds(routeBounds, {
-            padding: [75, 75],
+            paddingTopLeft: [360, 60],
+            paddingBottomRight: [60, 190],
             maxZoom: 6,
             duration: 1.2
           });
@@ -837,7 +843,8 @@ export const MapView: React.FC<MapViewProps> = ({
     const pts = routeData.waypoints.filter((w) => typeof w.lat === "number" && typeof w.lon === "number");
     if (pts.length > 1) {
       mapRef.current.flyToBounds(L.latLngBounds(pts.map((p) => [p.lat, p.lon])), {
-        padding: [75, 75],
+        paddingTopLeft: [360, 60],
+        paddingBottomRight: [60, 190],
         maxZoom: 6,
         duration: 1.0
       });
@@ -864,65 +871,71 @@ export const MapView: React.FC<MapViewProps> = ({
       {/* Leaflet Map Div */}
       <div ref={mapContainerRef} className="w-full h-full z-0" />
 
-      {/* British Admiralty Brass Compass Rose (Bottom-Left) */}
-      <div className="absolute bottom-4 left-4 z-[400] hidden sm:block pointer-events-auto">
-        <CompassRose heading={142} />
-      </div>
+      {/* Top-Right: Interactive Compass & Dismissible Camera Presets */}
+      <div className="absolute top-3 right-3 z-[400] flex flex-col items-end gap-2 pointer-events-auto">
+        {/* Sleek Interactive Compass Widget */}
+        <CompassRose
+          heading={0}
+          onResetNorth={() => {
+            handleZoomRoute();
+          }}
+        />
 
-      {/* Map Camera Presets Bar - Positioned safely above the bottom timeline cluster */}
-      <div className="absolute bottom-36 right-3 z-[400] flex flex-wrap gap-1 bg-panel/95 backdrop-blur-md border border-hairline p-1 shadow-lg text-xs">
-        <span className="text-[10px] uppercase font-bold text-ink-muted px-1.5 py-1 font-mono flex items-center">
-          CAMERA:
-        </span>
+        {/* Camera Views Button */}
         <button
-          onClick={handleZoomRoute}
-          className="px-2 py-1 bg-brass text-white hover:bg-brass-hover font-mono text-[11px] font-bold transition-colors cursor-pointer"
-          title="Focus camera on current departure and arrival route"
+          type="button"
+          onClick={() => setShowCameraPresets(!showCameraPresets)}
+          className="px-2.5 py-1.5 rounded-xl bg-white/95 backdrop-blur-md shadow-md border border-[#D7E1E8] text-xs font-semibold text-[#12202B] hover:border-[#0E7C93] flex items-center gap-1.5 transition cursor-pointer"
+          title="Map Camera Presets"
         >
-          ACTIVE ROUTE
+          <span>📷</span>
+          <span className="text-[11px] font-sans">Views</span>
         </button>
-        <button
-          onClick={handleZoomFullRoute}
-          className="px-2 py-1 bg-panel hover:bg-chart-bg text-ink border border-hairline font-mono text-[11px] transition-colors cursor-pointer"
-        >
-          TRANSIT OVERVIEW
-        </button>
-        <button
-          onClick={handleZoomWeddell}
-          className="px-2 py-1 bg-panel hover:bg-chart-bg text-brass border border-hairline font-mono text-[11px] transition-colors cursor-pointer"
-        >
-          WEDDELL ICE PACK
-        </button>
-        <button
-          onClick={handleZoomA23a}
-          className="px-2 py-1 bg-panel hover:bg-chart-bg text-caution border border-hairline font-mono text-[11px] transition-colors cursor-pointer"
-        >
-          MEGABERG A-23a
-        </button>
-      </div>
 
-      {/* Simulation HUD Overlay when timeline is active or scrubbed */}
-      {isPlaying ? (
-        <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[400] bg-brass text-white border border-brass px-3.5 py-1 text-[11px] font-mono shadow-md flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-white animate-ping shrink-0" />
-          <span className="font-bold tracking-wider">CONVLSTM KINEMATIC SIMULATION // T+{currentLeadDay * 24}h</span>
-          <span className="text-white/80 hidden sm:inline">| FLEET DRIFT: +{(currentLeadDay * 14.2).toFixed(1)} NM</span>
-        </div>
-      ) : currentLeadDay > 0 ? (
-        <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[400] bg-panel border border-brass text-ink px-3.5 py-1 text-[11px] font-mono shadow-md flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-brass shrink-0" />
-          <span className="text-brass font-bold">FORECAST HORIZON: DAY +{currentLeadDay} (+{currentLeadDay * 24}h)</span>
-          <span className="text-ink-muted hidden sm:inline">| ACCUM. DRIFT: +{(currentLeadDay * 14.2).toFixed(1)} NM</span>
-        </div>
-      ) : (
-        <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[400] hidden md:block bg-panel/95 border border-hairline px-3 py-1 text-[10px] font-mono text-ink-muted shadow-sm">
-          CLICK ANY POINT ON MAP TO INSPECT PHYSICAL RISK FACTORS
-        </div>
-      )}
-
-      {/* Coordinate & Grid Indicator */}
-      <div className="absolute bottom-3 left-48 z-[400] hidden lg:block bg-panel/95 border border-hairline px-2.5 py-1 text-[10px] font-mono text-ink-muted shadow-sm">
-        POLAR MERCATOR EPSG:3857 // DOMAIN: 60°S–78°S, 65°W–80°E
+        {/* Dismissible Camera Presets Dropdown */}
+        {showCameraPresets && (
+          <div className="bg-white/95 backdrop-blur-md rounded-xl border border-[#D7E1E8] shadow-xl p-2 flex flex-col gap-1 w-40">
+            <div className="flex items-center justify-between px-1 pb-1 border-b border-[#D7E1E8]/70 text-[10px] font-bold text-[#57707E] uppercase">
+              <span>Camera Views</span>
+              <button
+                type="button"
+                onClick={() => setShowCameraPresets(false)}
+                className="text-[#57707E] hover:text-[#12202B] p-0.5 cursor-pointer"
+                title="Close"
+              >
+                ✕
+              </button>
+            </div>
+            <button
+              type="button"
+              onClick={() => { handleZoomRoute(); setShowCameraPresets(false); }}
+              className="px-2.5 py-1.5 rounded-lg bg-[#0E7C93]/10 hover:bg-[#0E7C93] hover:text-white text-[#0E7C93] text-left text-xs font-semibold transition cursor-pointer"
+            >
+              🗺️ Route Focus
+            </button>
+            <button
+              type="button"
+              onClick={() => { handleZoomFullRoute(); setShowCameraPresets(false); }}
+              className="px-2.5 py-1.5 rounded-lg hover:bg-[#EFF4F7] text-[#12202B] text-left text-xs transition cursor-pointer"
+            >
+              🌐 Full Ocean
+            </button>
+            <button
+              type="button"
+              onClick={() => { handleZoomWeddell(); setShowCameraPresets(false); }}
+              className="px-2.5 py-1.5 rounded-lg hover:bg-[#EFF4F7] text-[#12202B] text-left text-xs transition cursor-pointer"
+            >
+              🌊 Weddell Sea
+            </button>
+            <button
+              type="button"
+              onClick={() => { handleZoomA23a(); setShowCameraPresets(false); }}
+              className="px-2.5 py-1.5 rounded-lg hover:bg-[#EFF4F7] text-[#A9700F] text-left text-xs font-medium transition cursor-pointer"
+            >
+              🏔️ A-23a Megaberg
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

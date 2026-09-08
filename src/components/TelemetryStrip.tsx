@@ -55,7 +55,7 @@ export const TelemetryStrip: React.FC<TelemetryStripProps> = ({
       className="bg-panel border border-hairline shadow-md overflow-hidden text-xs select-none"
     >
       {/* Primary Telemetry Metrics Row */}
-      <div className="px-4 py-2 flex flex-wrap items-center justify-between gap-3 md:gap-6 font-mono">
+      <div className="px-3.5 py-1.5 flex flex-wrap items-center justify-between gap-2 md:gap-4 font-mono">
         {/* Metric 1: Distance */}
         <div className="flex items-center gap-2">
           <Compass className="w-3.5 h-3.5 text-brass shrink-0" />

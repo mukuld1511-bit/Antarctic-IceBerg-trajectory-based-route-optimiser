@@ -149,44 +149,48 @@ export function generateRealisticIcebergSVG(options: IcebergGraphicOptions): str
   const labelHtml = uiMode === "civilian"
     ? `
       <div style="
-        margin-top: 3px;
-        background: rgba(255, 255, 255, 0.96);
-        border: 1.5px solid ${hazardColor};
+        margin-top: 2px;
+        background: ${isSelected ? '#0E7C93' : 'rgba(255, 255, 255, 0.95)'};
+        color: ${isSelected ? '#FFFFFF' : '#12202B'};
+        border: 1px solid ${hazardColor};
         border-radius: 4px;
-        padding: 2px 6px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+        padding: 1px 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
         white-space: nowrap;
         text-align: center;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       ">
-        <div style="font-size: 11px; font-weight: 800; color: #12202B; display: flex; align-items: center; justify-content: center; gap: 4px;">
+        <div style="font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 3px;">
           <span>${berg.iceberg_id}</span>
-          ${isMegaberg ? '<span style="font-size: 8px; background: #B23A2F; color: #fff; padding: 0.5px 3px; border-radius: 2px; font-weight: 700;">MEGABERG</span>' : ''}
+          ${isMegaberg ? `<span style="font-size: 7.5px; background: #B23A2F; color: #fff; padding: 0 2px; border-radius: 2px;">MEGA</span>` : ''}
         </div>
-        <div style="font-size: 9px; color: #57707E; font-weight: 500;">
-          ${(berg.length_m / 1000).toFixed(0)} km wide • ${berg.drift_speed_knots} kts
-        </div>
+        ${isSelected ? `
+          <div style="font-size: 8.5px; color: #E0F2FE; font-weight: 500; margin-top: 1px;">
+            ${(berg.length_m / 1000).toFixed(0)}km • ${berg.drift_speed_knots}kts
+          </div>
+        ` : ''}
       </div>
     `
     : `
       <div style="
         margin-top: 2px;
-        background: ${isSelected ? '#12202B' : 'rgba(255, 255, 255, 0.96)'};
-        border: 1.5px solid ${hazardColor};
-        border-radius: 0px;
-        padding: 1px 5px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.22);
+        background: ${isSelected ? '#12202B' : 'rgba(255, 255, 255, 0.92)'};
+        border: 1px solid ${hazardColor};
+        padding: 1px 4px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.2);
         white-space: nowrap;
         text-align: center;
         font-family: 'JetBrains Mono', monospace;
       ">
-        <div style="font-size: 10px; font-weight: 800; color: ${isSelected ? '#FFFFFF' : '#12202B'}; display: flex; align-items: center; justify-content: center; gap: 3px;">
+        <div style="font-size: 9.5px; font-weight: 700; color: ${isSelected ? '#FFFFFF' : '#12202B'}; display: flex; align-items: center; justify-content: center; gap: 2px;">
           <span>${berg.iceberg_id}</span>
-          ${isMegaberg ? `<span style="font-size: 8px; background: ${hazardColor}; color: #fff; padding: 0 2px; font-weight: bold;">MEGA</span>` : ''}
+          ${isMegaberg ? `<span style="font-size: 7.5px; background: ${hazardColor}; color: #fff; padding: 0 2px; font-weight: bold;">MEGA</span>` : ''}
         </div>
-        <div style="font-size: 8px; color: ${isSelected ? '#A4CDE0' : '#57707E'};">
-          ${driftDistNM > 0 ? `+${driftDistNM.toFixed(0)}NM ` : ''}${berg.drift_speed_knots}kts @ ${heading}°
-        </div>
+        ${isSelected ? `
+          <div style="font-size: 8px; color: #93C5FD; margin-top: 1px;">
+            ${driftDistNM > 0 ? `+${driftDistNM.toFixed(0)}NM ` : ''}${berg.drift_speed_knots}kts @ ${heading}°
+          </div>
+        ` : ''}
       </div>
     `;
 

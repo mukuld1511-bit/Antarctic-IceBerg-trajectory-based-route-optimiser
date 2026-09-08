@@ -115,10 +115,10 @@ export const ForecastScrubber: React.FC<ForecastScrubberProps> = ({
   return (
     <div
       id="forecast-scrubber-instrument"
-      className="bg-panel border border-hairline px-4 py-3 shadow-md flex flex-col gap-2.5 text-xs select-none relative overflow-hidden"
+      className="bg-panel border border-hairline px-3.5 py-1.5 shadow-md flex flex-col gap-1.5 text-xs select-none relative overflow-hidden"
     >
       {/* Top Telemetry & Status Readout Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono border-b border-hairline pb-2">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-[10.5px] font-mono border-b border-hairline pb-1">
         {/* Left: Simulation State Badge & Date */}
         <div className="flex items-center gap-2.5">
           <div
