@@ -42,3 +42,9 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Project cleanup
+design_assets/
+bun.lock
+metadata.json
+New folder/

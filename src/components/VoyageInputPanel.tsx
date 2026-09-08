@@ -190,97 +190,79 @@ export const VoyageInputPanel: React.FC<VoyageInputPanelProps> = ({
           <span className="text-[9px] font-mono text-brass">ONE-CLICK ROUTE</span>
         </div>
         
-        {/* Quick Corridor Buttons Grid */}
-        <div className="grid grid-cols-2 gap-1.5 max-h-36 overflow-y-auto pr-0.5">
-          {/* Indian NCPOR Corridors */}
-          <button
-            type="button"
-            onClick={() => handleApplyPreset("Port of Mormugao, Goa (India)", "Maitri Research Station (India, DML)")}
-            className="px-2 py-1 text-[11px] font-mono bg-brass-soft border border-brass/40 text-brass hover:bg-brass hover:text-white text-left truncate transition-colors font-semibold cursor-pointer"
-            title="Goa (India) to Maitri Station - Official NCPOR National Resupply Voyage"
-          >
-            🇮🇳 GOA &rarr; Maitri Stn
-          </button>
-          <button
-            type="button"
-            onClick={() => handleApplyPreset("Port of Mormugao, Goa (India)", "Bharati Research Station (India, Larsemann)")}
-            className="px-2 py-1 text-[11px] font-mono bg-brass-soft border border-brass/40 text-brass hover:bg-brass hover:text-white text-left truncate transition-colors font-semibold cursor-pointer"
-            title="Goa (India) to Bharati Station - East Antarctic Ocean Transit"
-          >
-            🇮🇳 GOA &rarr; Bharati Stn
-          </button>
+        {/* Quick Corridor Buttons */}
+        <div className="space-y-1.5">
+          <div className="grid grid-cols-2 gap-1.5">
+            <button
+              type="button"
+              onClick={() => handleApplyPreset("Port of Mormugao, Goa (India)", "Maitri Research Station (India, DML)")}
+              className="px-2 py-1.5 text-[10px] font-mono bg-brass-soft border border-brass/50 text-brass hover:bg-brass hover:text-white transition-colors font-bold cursor-pointer flex items-center justify-between"
+              title="Goa (India) to Maitri Station - Official NCPOR National Resupply Voyage"
+            >
+              <span>🇮🇳 Goa &rarr; Maitri</span>
+              <span className="text-[8px] bg-brass/20 px-1 font-semibold">DML</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleApplyPreset("Port of Mormugao, Goa (India)", "Bharati Research Station (India, Larsemann)")}
+              className="px-2 py-1.5 text-[10px] font-mono bg-brass-soft border border-brass/50 text-brass hover:bg-brass hover:text-white transition-colors font-bold cursor-pointer flex items-center justify-between"
+              title="Goa (India) to Bharati Station - East Antarctic Ocean Transit"
+            >
+              <span>🇮🇳 Goa &rarr; Bharati</span>
+              <span className="text-[8px] bg-brass/20 px-1 font-semibold">PRYDZ</span>
+            </button>
+          </div>
 
-          {/* South Africa Staging */}
-          <button
-            type="button"
-            onClick={() => handleApplyPreset("Cape Town (South Africa)", "Maitri Research Station (India, DML)")}
-            className="px-2 py-1 text-[11px] font-mono bg-panel border border-hairline text-ink-muted hover:text-brass hover:border-brass text-left truncate transition-colors cursor-pointer"
-            title="Cape Town to Maitri Station"
-          >
-            🇿🇦 CPT &rarr; Maitri Stn
-          </button>
-          <button
-            type="button"
-            onClick={() => handleApplyPreset("Cape Town (South Africa)", "Bharati Research Station (India, Larsemann)")}
-            className="px-2 py-1 text-[11px] font-mono bg-panel border border-hairline text-ink-muted hover:text-brass hover:border-brass text-left truncate transition-colors cursor-pointer"
-            title="Cape Town to Bharati Station"
-          >
-            🇿🇦 CPT &rarr; Bharati Stn
-          </button>
-
-          {/* South America / Peninsula */}
-          <button
-            type="button"
-            onClick={() => handleApplyPreset("Ushuaia (Argentina)", "Rothera Research Station (UK, Peninsula)")}
-            className="px-2 py-1 text-[11px] font-mono bg-panel border border-hairline text-ink-muted hover:text-brass hover:border-brass text-left truncate transition-colors cursor-pointer"
-            title="Ushuaia to Rothera Station (Drake Passage Transit)"
-          >
-            🇦🇷 USH &rarr; Rothera Stn
-          </button>
-          <button
-            type="button"
-            onClick={() => handleApplyPreset("Punta Arenas (Chile)", "Weddell Sea Continental Ice Shelf (Ronne)")}
-            className="px-2 py-1 text-[11px] font-mono bg-panel border border-hairline text-ink-muted hover:text-brass hover:border-brass text-left truncate transition-colors cursor-pointer"
-            title="Punta Arenas to Weddell Sea Continental Shelf"
-          >
-            🇨🇱 PUQ &rarr; Weddell Sea
-          </button>
-
-          {/* Oceania / Ross Sea */}
-          <button
-            type="button"
-            onClick={() => handleApplyPreset("Hobart, Tasmania (Australia)", "Bharati Research Station (India, Larsemann)")}
-            className="px-2 py-1 text-[11px] font-mono bg-panel border border-hairline text-ink-muted hover:text-brass hover:border-brass text-left truncate transition-colors cursor-pointer"
-            title="Hobart (Australia) to Bharati Station"
-          >
-            🇦🇺 HBA &rarr; Bharati Stn
-          </button>
-          <button
-            type="button"
-            onClick={() => handleApplyPreset("Lyttelton / Christchurch (New Zealand)", "McMurdo Station (USA, Ross Island)")}
-            className="px-2 py-1 text-[11px] font-mono bg-panel border border-hairline text-ink-muted hover:text-brass hover:border-brass text-left truncate transition-colors cursor-pointer"
-            title="Lyttelton (New Zealand) to McMurdo Station (Ross Sea Deep Route)"
-          >
-            🇳🇿 LYT &rarr; McMurdo Base
-          </button>
-
-          {/* European Polar Gateway */}
-          <button
-            type="button"
-            onClick={() => handleApplyPreset("Port of Bremerhaven (Germany)", "Neumayer Station III (Germany, Atka)")}
-            className="px-2 py-1 text-[11px] font-mono bg-panel border border-hairline text-ink-muted hover:text-brass hover:border-brass text-left truncate transition-colors cursor-pointer"
-            title="Bremerhaven (Germany) to Neumayer Station III (RV Polarstern Route)"
-          >
-            🇩🇪 BRV &rarr; Neumayer III
-          </button>
-          <button
-            type="button"
-            onClick={() => handleApplyPreset("Port of Durban (South Africa)", "Showa Station (Japan, Lützow-Holm)")}
-            className="px-2 py-1 text-[11px] font-mono bg-panel border border-hairline text-ink-muted hover:text-brass hover:border-brass text-left truncate transition-colors cursor-pointer"
-            title="Durban to Showa Station (Japan) Lützow-Holm Bay Corridor"
-          >
-            🇿🇦 DUR &rarr; Showa Stn
-          </button>
+          <div className="grid grid-cols-3 gap-1">
+            <button
+              type="button"
+              onClick={() => handleApplyPreset("Cape Town (South Africa)", "Maitri Research Station (India, DML)")}
+              className="px-1.5 py-1 text-[9.5px] font-mono bg-panel border border-hairline text-ink-muted hover:text-brass hover:border-brass transition-colors cursor-pointer text-center truncate"
+              title="Cape Town to Maitri Station"
+            >
+              🇿🇦 CPT&rarr;Maitri
+            </button>
+            <button
+              type="button"
+              onClick={() => handleApplyPreset("Cape Town (South Africa)", "Bharati Research Station (India, Larsemann)")}
+              className="px-1.5 py-1 text-[9.5px] font-mono bg-panel border border-hairline text-ink-muted hover:text-brass hover:border-brass transition-colors cursor-pointer text-center truncate"
+              title="Cape Town to Bharati Station"
+            >
+              🇿🇦 CPT&rarr;Bharati
+            </button>
+            <button
+              type="button"
+              onClick={() => handleApplyPreset("Hobart, Tasmania (Australia)", "Bharati Research Station (India, Larsemann)")}
+              className="px-1.5 py-1 text-[9.5px] font-mono bg-panel border border-hairline text-ink-muted hover:text-brass hover:border-brass transition-colors cursor-pointer text-center truncate"
+              title="Hobart (Australia) to Bharati Station"
+            >
+              🇦🇺 HBA&rarr;Bharati
+            </button>
+            <button
+              type="button"
+              onClick={() => handleApplyPreset("Ushuaia (Argentina)", "Rothera Research Station (UK, Peninsula)")}
+              className="px-1.5 py-1 text-[9.5px] font-mono bg-panel border border-hairline text-ink-muted hover:text-brass hover:border-brass transition-colors cursor-pointer text-center truncate"
+              title="Ushuaia to Rothera Station (Drake Passage Transit)"
+            >
+              🇦🇷 USH&rarr;Rothera
+            </button>
+            <button
+              type="button"
+              onClick={() => handleApplyPreset("Punta Arenas (Chile)", "Weddell Sea Continental Ice Shelf (Ronne)")}
+              className="px-1.5 py-1 text-[9.5px] font-mono bg-panel border border-hairline text-ink-muted hover:text-brass hover:border-brass transition-colors cursor-pointer text-center truncate"
+              title="Punta Arenas to Weddell Sea Continental Shelf"
+            >
+              🇨🇱 PUQ&rarr;Weddell
+            </button>
+            <button
+              type="button"
+              onClick={() => handleApplyPreset("Lyttelton / Christchurch (New Zealand)", "McMurdo Station (USA, Ross Island)")}
+              className="px-1.5 py-1 text-[9.5px] font-mono bg-panel border border-hairline text-ink-muted hover:text-brass hover:border-brass transition-colors cursor-pointer text-center truncate"
+              title="Lyttelton (New Zealand) to McMurdo Station (Ross Sea Deep Route)"
+            >
+              🇳🇿 LYT&rarr;McMurdo
+            </button>
+          </div>
         </div>
       </div>
 

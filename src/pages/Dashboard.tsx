@@ -114,6 +114,7 @@ export const Dashboard: React.FC = () => {
 
   // Responsive Drawer & Panels
   const [leftRailOpen, setLeftRailOpen] = useState<boolean>(true);
+  const [leftRailTab, setLeftRailTab] = useState<"route" | "fleet">("route");
   const [rightPanelOpen, setRightPanelOpen] = useState<boolean>(true);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState<boolean>(false);
 
@@ -541,212 +542,242 @@ export const Dashboard: React.FC = () => {
                 />
               ) : (
                 <>
-                  {/* Collapse button header */}
-                  <div className="flex items-center justify-between bg-panel border border-hairline px-3 py-1.5 text-[11px] font-mono text-ink-muted shadow-sm">
-                    <span className="flex items-center gap-1.5 text-ink font-sans font-semibold">
-                      <Layers className="w-3.5 h-3.5 text-brass" />
-                      CONNING MATRIX 1280 // REPEATERS
-                    </span>
+                  {/* Tabbed Navigation Header for Left Rail */}
+                  <div className="flex items-center justify-between bg-panel border border-hairline p-1 shadow-sm">
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => setLeftRailTab("route")}
+                        className={`px-3 py-1.5 text-[10.5px] font-mono font-bold flex items-center gap-1.5 transition-colors cursor-pointer border ${
+                          leftRailTab === "route"
+                            ? "bg-brass text-white border-brass shadow-xs"
+                            : "bg-panel-low text-ink-muted border-hairline hover:text-ink hover:bg-panel"
+                        }`}
+                        title="Voyage Route Planner & Objectives"
+                      >
+                        <Ship className="w-3.5 h-3.5" />
+                        <span>VOYAGE ROUTE</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setLeftRailTab("fleet")}
+                        className={`px-3 py-1.5 text-[10.5px] font-mono font-bold flex items-center gap-1.5 transition-colors cursor-pointer border ${
+                          leftRailTab === "fleet"
+                            ? "bg-brass text-white border-brass shadow-xs"
+                            : "bg-panel-low text-ink-muted border-hairline hover:text-ink hover:bg-panel"
+                        }`}
+                        title="Drift Fleet Tracking & Live AIS Stream"
+                      >
+                        <Radio className="w-3.5 h-3.5 text-danger animate-pulse" />
+                        <span>FLEET & AIS ({(summary?.icebergs || []).length})</span>
+                      </button>
+                    </div>
                     <button
                       onClick={() => setLeftRailOpen(false)}
-                      className="p-1 hover:text-ink hover:bg-panel-low transition cursor-pointer"
+                      className="p-1 hover:text-ink hover:bg-panel-low transition cursor-pointer text-ink-muted"
                       title="Collapse Rail"
                     >
                       <ChevronLeft className="w-3.5 h-3.5" />
                     </button>
                   </div>
 
-                  {/* 1. Voyage Input Panel */}
-                  <VoyageInputPanel
-                    onOptimizeRoute={(params) => {
-                      handleOptimizeRoute(params);
-                    }}
-                    isLoading={loadingRoute}
-                    selectedParams={voyageParams}
-                  />
+                  {leftRailTab === "route" ? (
+                    <>
+                      {/* 1. Voyage Input Panel */}
+                      <VoyageInputPanel
+                        onOptimizeRoute={(params) => {
+                          handleOptimizeRoute(params);
+                        }}
+                        isLoading={loadingRoute}
+                        selectedParams={voyageParams}
+                      />
 
-                  {/* 2. Route Comparison Mode & Objectives Slider */}
-              <RouteComparisonToggle
-                showOptimized={showRecommendedRoute}
-                onToggleOptimized={() => setShowRecommendedRoute(!showRecommendedRoute)}
-                showGreatCircle={showGreatCircle}
-                onToggleGreatCircle={() => setShowGreatCircle(!showGreatCircle)}
-                riskWeight={riskWeight}
-                onChangeRiskWeight={(w) => {
-                  setRiskWeight(w);
-                  handleTriggerRecompute(w);
-                }}
-                onRiskWeightChange={(w) => {
-                  setRiskWeight(w);
-                  handleTriggerRecompute(w);
-                }}
-                routeData={routeData}
-              />
+                      {/* 2. Route Comparison Mode & Objectives Slider */}
+                      <RouteComparisonToggle
+                        showOptimized={showRecommendedRoute}
+                        onToggleOptimized={() => setShowRecommendedRoute(!showRecommendedRoute)}
+                        showGreatCircle={showGreatCircle}
+                        onToggleGreatCircle={() => setShowGreatCircle(!showGreatCircle)}
+                        riskWeight={riskWeight}
+                        onChangeRiskWeight={(w) => {
+                          setRiskWeight(w);
+                          handleTriggerRecompute(w);
+                        }}
+                        onRiskWeightChange={(w) => {
+                          setRiskWeight(w);
+                          handleTriggerRecompute(w);
+                        }}
+                        routeData={routeData}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      {/* 3. Iceberg Fleet Quick Access & Tracking */}
+                      <div
+                        id="iceberg-fleet-widget"
+                        className="bg-panel border border-hairline p-3 text-xs shadow-md space-y-2"
+                      >
+                        <div className="flex items-center justify-between pb-1.5 border-b border-hairline text-[11px] font-mono text-ink-muted">
+                          <span className="flex items-center gap-1 text-caution font-semibold font-sans">
+                            <Radio className="w-3 h-3 animate-pulse text-danger" />
+                            DRIFT FLEET ({summary?.icebergs?.length || 0})
+                          </span>
+                          <span className="text-[9px] font-mono bg-panel-low px-1.5 py-0.5 text-ink-muted border border-hairline">NIC / SAR</span>
+                        </div>
 
-              {/* 3. Iceberg Fleet Quick Access & Tracking */}
-              <div
-                id="iceberg-fleet-widget"
-                className="bg-panel border border-hairline p-3 text-xs shadow-md space-y-2"
-              >
-                <div className="flex items-center justify-between pb-1.5 border-b border-hairline text-[11px] font-mono text-ink-muted">
-                  <span className="flex items-center gap-1 text-caution font-semibold font-sans">
-                    <Radio className="w-3 h-3 animate-pulse text-danger" />
-                    DRIFT FLEET ({summary?.icebergs?.length || 0})
-                  </span>
-                  <span className="text-[9px] font-mono bg-panel-low px-1.5 py-0.5 text-ink-muted border border-hairline">NIC / SAR</span>
-                </div>
+                        {/* Fleet Filter Tabs */}
+                        <div className="grid grid-cols-3 gap-1 text-[10px] font-mono">
+                          <button
+                            type="button"
+                            onClick={() => setFleetFilter("ALL")}
+                            className={`py-1 text-center transition-colors border cursor-pointer ${
+                              fleetFilter === "ALL"
+                                ? "bg-brass text-white font-bold border-brass"
+                                : "bg-panel border-hairline text-ink-muted hover:text-ink"
+                            }`}
+                          >
+                            ALL ({(summary?.icebergs || []).length})
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setFleetFilter("MEGABERG")}
+                            className={`py-1 text-center transition-colors border cursor-pointer ${
+                              fleetFilter === "MEGABERG"
+                                ? "bg-danger text-white font-bold border-danger"
+                                : "bg-panel border-hairline text-ink-muted hover:text-ink"
+                            }`}
+                          >
+                            MEGABERGS
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setFleetFilter("CRITICAL")}
+                            className={`py-1 text-center transition-colors border cursor-pointer ${
+                              fleetFilter === "CRITICAL"
+                                ? "bg-caution text-white font-bold border-caution"
+                                : "bg-panel border-hairline text-ink-muted hover:text-ink"
+                            }`}
+                          >
+                            HIGH RISK
+                          </button>
+                        </div>
 
-                {/* Fleet Filter Tabs */}
-                <div className="grid grid-cols-3 gap-1 text-[10px] font-mono">
-                  <button
-                    type="button"
-                    onClick={() => setFleetFilter("ALL")}
-                    className={`py-1 text-center transition-colors border cursor-pointer ${
-                      fleetFilter === "ALL"
-                        ? "bg-brass text-white font-bold border-brass"
-                        : "bg-panel border-hairline text-ink-muted hover:text-ink"
-                    }`}
-                  >
-                    ALL ({(summary?.icebergs || []).length})
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFleetFilter("MEGABERG")}
-                    className={`py-1 text-center transition-colors border cursor-pointer ${
-                      fleetFilter === "MEGABERG"
-                        ? "bg-danger text-white font-bold border-danger"
-                        : "bg-panel border-hairline text-ink-muted hover:text-ink"
-                    }`}
-                  >
-                    MEGABERGS
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFleetFilter("CRITICAL")}
-                    className={`py-1 text-center transition-colors border cursor-pointer ${
-                      fleetFilter === "CRITICAL"
-                        ? "bg-caution text-white font-bold border-caution"
-                        : "bg-panel border-hairline text-ink-muted hover:text-ink"
-                    }`}
-                  >
-                    HIGH RISK
-                  </button>
-                </div>
-
-                {/* Icebergs List with 1-Click Track & ODE View */}
-                <div className="space-y-1.5 max-h-44 overflow-y-auto pr-1">
-                  {(summary?.icebergs || [])
-                    .filter((b) => {
-                      if (fleetFilter === "MEGABERG") return b.size_class === "D";
-                      if (fleetFilter === "CRITICAL") return b.hazard_level === "CRITICAL" || b.hazard_level === "HIGH";
-                      return true;
-                    })
-                    .map((b) => {
-                      const isSelected = selectedIceberg?.iceberg_id === b.iceberg_id;
-                      const isMegaberg = b.size_class === "D";
-                      return (
-                        <div
-                          key={b.iceberg_id}
-                          onClick={() => handleSelectIceberg(b)}
-                          className={`p-2 border cursor-pointer flex items-center justify-between transition-colors ${
-                            isSelected
-                              ? "bg-brass-soft border-brass"
-                              : "bg-panel-low hover:bg-chart-bg border-hairline"
-                          }`}
-                        >
-                          <div className="flex items-center gap-2">
-                            <span
-                              className={`w-6 h-6 flex items-center justify-center font-bold text-[10px] shrink-0 border ${
-                                b.hazard_level === "CRITICAL"
-                                  ? "bg-danger-light border-danger text-danger"
-                                  : isMegaberg
-                                  ? "bg-caution-light border-caution text-caution"
-                                  : "bg-brass-soft border-brass text-brass"
-                              }`}
-                            >
-                              {isMegaberg ? "🏔️" : b.size_class}
-                            </span>
-                            <div>
-                              <div className="flex items-center gap-1.5">
-                                <span className="font-mono text-ink font-bold text-[11px]">
-                                  {b.iceberg_id}
-                                </span>
-                                <span
-                                  className={`text-[8px] font-mono px-1 py-0.2 font-semibold border ${
-                                    b.hazard_level === "CRITICAL"
-                                      ? "bg-danger-light border-danger text-danger"
-                                      : "bg-caution-light border-caution text-caution"
+                        {/* Icebergs List with 1-Click Track & ODE View */}
+                        <div className="space-y-1.5 max-h-64 overflow-y-auto pr-1">
+                          {(summary?.icebergs || [])
+                            .filter((b) => {
+                              if (fleetFilter === "MEGABERG") return b.size_class === "D";
+                              if (fleetFilter === "CRITICAL") return b.hazard_level === "CRITICAL" || b.hazard_level === "HIGH";
+                              return true;
+                            })
+                            .map((b) => {
+                              const isSelected = selectedIceberg?.iceberg_id === b.iceberg_id;
+                              const isMegaberg = b.size_class === "D";
+                              return (
+                                <div
+                                  key={b.iceberg_id}
+                                  onClick={() => handleSelectIceberg(b)}
+                                  className={`p-2 border cursor-pointer flex items-center justify-between transition-colors ${
+                                    isSelected
+                                      ? "bg-brass-soft border-brass"
+                                      : "bg-panel-low hover:bg-chart-bg border-hairline"
                                   }`}
                                 >
-                                  {b.hazard_level}
-                                </span>
-                              </div>
-                              <div className="text-[10px] text-ink-muted truncate max-w-[130px]">
-                                {b.name}
-                              </div>
-                            </div>
-                          </div>
+                                  <div className="flex items-center gap-2">
+                                    <span
+                                      className={`w-6 h-6 flex items-center justify-center font-bold text-[10px] shrink-0 border ${
+                                        b.hazard_level === "CRITICAL"
+                                          ? "bg-danger-light border-danger text-danger"
+                                          : isMegaberg
+                                          ? "bg-caution-light border-caution text-caution"
+                                          : "bg-brass-soft border-brass text-brass"
+                                      }`}
+                                    >
+                                      {isMegaberg ? "🏔️" : b.size_class}
+                                    </span>
+                                    <div>
+                                      <div className="flex items-center gap-1.5">
+                                        <span className="font-mono text-ink font-bold text-[11px]">
+                                          {b.iceberg_id}
+                                        </span>
+                                        <span
+                                          className={`text-[8px] font-mono px-1 py-0.2 font-semibold border ${
+                                            b.hazard_level === "CRITICAL"
+                                              ? "bg-danger-light border-danger text-danger"
+                                              : "bg-caution-light border-caution text-caution"
+                                          }`}
+                                        >
+                                          {b.hazard_level}
+                                        </span>
+                                      </div>
+                                      <div className="text-[10px] text-ink-muted truncate max-w-[130px]">
+                                        {b.name}
+                                      </div>
+                                    </div>
+                                  </div>
 
-                          <div className="text-right font-mono text-[10px] shrink-0">
-                            <span className="text-ink font-bold block">{b.drift_speed_knots} kts</span>
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleOpenIcebergModal(b);
-                              }}
-                              className="text-[9px] text-brass hover:underline font-semibold cursor-pointer"
-                            >
-                              ODE PHYSICS ↗
-                            </button>
+                                  <div className="text-right font-mono text-[10px] shrink-0">
+                                    <span className="text-ink font-bold block">{b.drift_speed_knots} kts</span>
+                                    <button
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleOpenIcebergModal(b);
+                                      }}
+                                      className="text-[9px] text-brass hover:underline font-semibold cursor-pointer"
+                                    >
+                                      ODE PHYSICS ↗
+                                    </button>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                        </div>
+                      </div>
+
+                      {/* 4. Live AIS Vessel Tracking */}
+                      <div
+                        id="live-vessel-widget"
+                        className="bg-panel border border-hairline p-3 text-xs shadow-md"
+                      >
+                        <div className="flex items-center justify-between pb-1.5 border-b border-hairline text-[11px] font-mono text-ink-muted">
+                          <span className="flex items-center gap-1 text-brass font-semibold font-sans">
+                            <Anchor className="w-3 h-3" />
+                            LIVE AIS VESSELS ({liveVessels.length})
+                          </span>
+                          <span className="text-[9px] font-mono bg-panel-low px-1.5 py-0.5 border border-hairline">{vesselCount} TRACKED</span>
+                        </div>
+
+                        <div className="mt-2 flex items-center justify-between">
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={showVessels}
+                              onChange={() => setShowVessels(!showVessels)}
+                              className="w-3.5 h-3.5 accent-brass cursor-pointer"
+                            />
+                            <span className="text-[11px] text-ink font-medium">Show on Map</span>
+                          </label>
+                          <div className="flex items-center gap-1 text-[9px] font-mono text-ink-muted">
+                            <span className="w-1.5 h-1.5 rounded-full bg-safe animate-pulse"></span>
+                            STREAMING
                           </div>
                         </div>
-                      );
-                    })}
-                </div>
-              </div>
 
-              {/* 4. Live AIS Vessel Tracking */}
-              <div
-                id="live-vessel-widget"
-                className="bg-panel border border-hairline p-3 text-xs shadow-md"
-              >
-                <div className="flex items-center justify-between pb-1.5 border-b border-hairline text-[11px] font-mono text-ink-muted">
-                  <span className="flex items-center gap-1 text-brass font-semibold font-sans">
-                    <Anchor className="w-3 h-3" />
-                    LIVE AIS VESSELS ({liveVessels.length})
-                  </span>
-                  <span className="text-[9px] font-mono bg-panel-low px-1.5 py-0.5 border border-hairline">{vesselCount} TRACKED</span>
-                </div>
-
-                <div className="mt-2 flex items-center justify-between">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={showVessels}
-                      onChange={() => setShowVessels(!showVessels)}
-                      className="w-3.5 h-3.5 accent-brass cursor-pointer"
-                    />
-                    <span className="text-[11px] text-ink font-medium">Show on Map</span>
-                  </label>
-                  <div className="flex items-center gap-1 text-[9px] font-mono text-ink-muted">
-                    <span className="w-1.5 h-1.5 rounded-full bg-safe animate-pulse"></span>
-                    STREAMING
-                  </div>
-                </div>
-
-                {liveVessels.length > 0 && (
-                  <div className="mt-2 grid grid-cols-3 gap-1 text-[9px] font-mono">
-                    <div className="flex items-center gap-1"><span className="w-2 h-2 bg-[#2563EB]"></span>Cargo</div>
-                    <div className="flex items-center gap-1"><span className="w-2 h-2 bg-caution"></span>Tanker</div>
-                    <div className="flex items-center gap-1"><span className="w-2 h-2 bg-safe"></span>Passenger</div>
-                    <div className="flex items-center gap-1"><span className="w-2 h-2 bg-brass"></span>Fishing</div>
-                    <div className="flex items-center gap-1"><span className="w-2 h-2 bg-[#7C3AED]"></span>HSC</div>
-                    <div className="flex items-center gap-1"><span className="w-2 h-2 bg-ink-muted"></span>Other</div>
-                  </div>
-                )}
-              </div>
-            </>
+                        {liveVessels.length > 0 && (
+                          <div className="mt-2 grid grid-cols-3 gap-1 text-[9px] font-mono">
+                            <div className="flex items-center gap-1"><span className="w-2 h-2 bg-[#2563EB]"></span>Cargo</div>
+                            <div className="flex items-center gap-1"><span className="w-2 h-2 bg-caution"></span>Tanker</div>
+                            <div className="flex items-center gap-1"><span className="w-2 h-2 bg-safe"></span>Passenger</div>
+                            <div className="flex items-center gap-1"><span className="w-2 h-2 bg-brass"></span>Fishing</div>
+                            <div className="flex items-center gap-1"><span className="w-2 h-2 bg-[#7C3AED]"></span>HSC</div>
+                            <div className="flex items-center gap-1"><span className="w-2 h-2 bg-ink-muted"></span>Other</div>
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </>
           )}
         </div>
           ) : (
@@ -765,7 +796,7 @@ export const Dashboard: React.FC = () => {
         {/* ----------------------------------------------------------------------- */}
         <div
           id="right-instrument-rail"
-          className="absolute top-3 right-3 z-[450] hidden md:flex flex-col gap-3 w-72 pointer-events-none max-h-[calc(100vh-220px)]"
+          className="absolute top-3 right-3 z-[450] hidden md:flex flex-col gap-2.5 w-80 pointer-events-none max-h-[calc(100vh-200px)]"
         >
           {uiMode === "civilian" ? (
             <CivilianRightOverlay
@@ -774,7 +805,7 @@ export const Dashboard: React.FC = () => {
               selectedIcebergId={selectedIceberg?.iceberg_id}
             />
           ) : rightPanelOpen ? (
-            <div className="pointer-events-auto flex flex-col gap-3 overflow-y-auto pr-1">
+            <div className="pointer-events-auto flex flex-col gap-2.5 overflow-y-auto pr-1">
               <div className="flex items-center justify-between bg-panel border border-hairline px-3 py-1 text-[11px] font-mono text-ink-muted shadow-sm">
                 <span className="font-sans font-semibold text-ink uppercase tracking-wider text-[10px]">SITUATIONAL AWARENESS</span>
                 <button
@@ -785,6 +816,18 @@ export const Dashboard: React.FC = () => {
                   <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               </div>
+
+              {/* 0. Docked Coordinate Inspector (When user clicks map or alert) */}
+              {inspectorData && (
+                <div className="pointer-events-auto">
+                  <MapInspectorPopup
+                    data={inspectorData}
+                    onClose={() => setInspectorData(null)}
+                    uiMode={uiMode}
+                    docked={true}
+                  />
+                </div>
+              )}
 
               {/* 1. Alert Panel */}
               <AlertPanel
@@ -827,13 +870,14 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* ----------------------------------------------------------------------- */}
-        {/* MAP CLICK INSPECTOR POPUP (Fixed on screen or anchored to coordinates)  */}
+        {/* MAP CLICK INSPECTOR POPUP (Floating only if right rail is collapsed)    */}
         {/* ----------------------------------------------------------------------- */}
-        {inspectorData && (
+        {inspectorData && (!rightPanelOpen || uiMode === "civilian") && (
           <MapInspectorPopup
             data={inspectorData}
             onClose={() => setInspectorData(null)}
             uiMode={uiMode}
+            docked={false}
           />
         )}
 

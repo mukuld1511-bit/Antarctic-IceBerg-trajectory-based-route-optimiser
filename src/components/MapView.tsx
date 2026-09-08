@@ -869,8 +869,8 @@ export const MapView: React.FC<MapViewProps> = ({
         <CompassRose heading={142} />
       </div>
 
-      {/* Map Camera Presets Bar */}
-      <div className="absolute bottom-3 right-3 z-[400] flex flex-wrap gap-1 bg-panel border border-hairline p-1 shadow-md text-xs">
+      {/* Map Camera Presets Bar - Positioned safely above the bottom timeline cluster */}
+      <div className="absolute bottom-36 right-3 z-[400] flex flex-wrap gap-1 bg-panel/95 backdrop-blur-md border border-hairline p-1 shadow-lg text-xs">
         <span className="text-[10px] uppercase font-bold text-ink-muted px-1.5 py-1 font-mono flex items-center">
           CAMERA:
         </span>

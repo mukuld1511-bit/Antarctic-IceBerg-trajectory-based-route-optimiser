@@ -6,12 +6,14 @@ interface MapInspectorPopupProps {
   data: MapInspectionData | null;
   onClose: () => void;
   uiMode?: "naval" | "civilian";
+  docked?: boolean;
 }
 
 export const MapInspectorPopup: React.FC<MapInspectorPopupProps> = ({
   data,
   onClose,
-  uiMode = "naval"
+  uiMode = "naval",
+  docked = false
 }) => {
   if (!data) return null;
 
@@ -31,7 +33,11 @@ export const MapInspectorPopup: React.FC<MapInspectorPopupProps> = ({
     return (
       <div
         id="map-point-inspector-popup"
-        className="absolute z-[1000] top-4 right-4 md:right-6 w-80 bg-white/95 backdrop-blur-md border border-[#D7E1E8] rounded-2xl shadow-2xl p-4 text-xs select-none"
+        className={`${
+          docked
+            ? "relative w-full"
+            : "absolute z-[1000] top-4 right-4 md:right-84 w-80"
+        } bg-white/95 backdrop-blur-md border border-[#D7E1E8] rounded-2xl shadow-2xl p-4 text-xs select-none`}
       >
         {/* Friendly Header */}
         <div className="flex items-center justify-between pb-2.5 border-b border-[#E2E8F0]">
@@ -143,7 +149,11 @@ export const MapInspectorPopup: React.FC<MapInspectorPopupProps> = ({
   return (
     <div
       id="map-point-inspector-popup"
-      className="absolute z-[1000] top-4 right-4 md:right-6 w-80 bg-panel/95 backdrop-blur-md border border-hairline rounded-none shadow-2xl p-4 text-xs select-none"
+      className={`${
+        docked
+          ? "relative w-full"
+          : "absolute z-[1000] top-3 right-4 md:right-84 w-80"
+      } bg-panel/95 backdrop-blur-md border border-hairline rounded-none shadow-2xl p-3 text-xs select-none`}
     >
       {/* Header */}
       <div className="flex items-center justify-between pb-2.5 border-b border-hairline">
