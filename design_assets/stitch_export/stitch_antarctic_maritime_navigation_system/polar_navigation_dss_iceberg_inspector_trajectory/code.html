@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>POLARIS DSS // Iceberg Inspector</title>
+<!-- Google Fonts: Inter & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with custom theme config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary": "#006275",
+            "tertiary-fixed-dim": "#feb957",
+            "on-tertiary": "#ffffff",
+            "surface": "#f5fafd",
+            "on-tertiary-fixed-variant": "#633f00",
+            "error": "#ba1a1a",
+            "on-secondary": "#ffffff",
+            "surface-container-low": "#eff4f7",
+            "surface-container-lowest": "#ffffff",
+            "on-background": "#171c1f",
+            "secondary-container": "#cce6f7",
+            "on-primary-container": "#ecfaff",
+            "on-primary": "#ffffff",
+            "surface-container": "#eaeff2",
+            "on-primary-fixed-variant": "#004e5e",
+            "tertiary-fixed": "#ffddb5",
+            "surface-bright": "#f5fafd",
+            "surface-container-high": "#e4e9ec",
+            "outline-variant": "#bec8cc",
+            "surface-tint": "#00687c",
+            "surface-dim": "#d6dbde",
+            "on-tertiary-container": "#fff6f0",
+            "inverse-surface": "#2c3134",
+            "tertiary-container": "#9d6600",
+            "on-tertiary-fixed": "#2a1800",
+            "on-error-container": "#93000a",
+            "primary-container": "#0e7c93",
+            "on-error": "#ffffff",
+            "inverse-on-surface": "#ecf1f4",
+            "on-secondary-container": "#4f6876",
+            "on-secondary-fixed": "#021e2a",
+            "surface-container-highest": "#dee3e6",
+            "secondary": "#49626f",
+            "on-surface-variant": "#3e484c",
+            "primary-fixed-dim": "#7cd3ec",
+            "secondary-fixed-dim": "#b0cada",
+            "on-primary-fixed": "#001f27",
+            "outline": "#6e797c",
+            "tertiary": "#7c5000",
+            "on-surface": "#171c1f",
+            "inverse-primary": "#7cd3ec",
+            "surface-variant": "#dee3e6",
+            "background": "#f5fafd",
+            "error-container": "#ffdad6",
+            "secondary-fixed": "#cce6f7",
+            "primary-fixed": "#b0ecff",
+            "on-secondary-fixed-variant": "#314a57"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "pad-compact": "0.75rem",
+            "grid-hairline": "1px",
+            "pad-deck": "1.5rem",
+            "margin-screen": "1rem",
+            "pad-tight": "0.5rem",
+            "gutter": "1rem",
+            "panel-gap": "0.5rem",
+            "pad-base": "1rem",
+            "pad-micro": "0.25rem"
+          },
+          "fontFamily": {
+            "label-caps": ["Inter", "sans-serif"],
+            "display-lg": ["Inter", "sans-serif"],
+            "body-lg": ["Inter", "sans-serif"],
+            "headline-sm": ["Inter", "sans-serif"],
+            "data-mono-md": ["JetBrains Mono", "monospace"],
+            "data-mono-sm": ["JetBrains Mono", "monospace"],
+            "headline-md": ["Inter", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "data-mono-lg": ["JetBrains Mono", "monospace"]
+          },
+          "fontSize": {
+            "label-caps": ["10px", { "lineHeight": "12px", "fontWeight": "600" }],
+            "display-lg": ["32px", { "lineHeight": "38px", "fontWeight": "600" }],
+            "body-lg": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "headline-sm": ["16px", { "lineHeight": "22px", "fontWeight": "600" }],
+            "data-mono-md": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "data-mono-sm": ["11px", { "lineHeight": "14px", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-md": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "data-mono-lg": ["18px", { "lineHeight": "24px", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      vertical-align: middle;
+      display: inline-block;
+      line-height: 1;
+    }
+    /* Hairline nautical grid background */
+    .bg-hydro-grid {
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, rgba(190, 200, 204, 0.25) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(190, 200, 204, 0.25) 1px, transparent 1px);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #bec8cc;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface antialiased overflow-x-hidden min-h-screen flex flex-col font-body-md text-body-md select-none">
+<!-- ================= TOP APP BAR (SHARED COMPONENT JSON) ================= -->
+<header class="flex justify-between items-center w-full px-pad-deck h-12 border-b border-outline-variant bg-surface-container-lowest shrink-0 z-50">
+<!-- Brand / Vessel ID -->
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="farsight_digital">farsight_digital</span>
+<span class="font-headline-sm text-headline-sm font-semibold tracking-tight text-on-surface">POLARIS DSS // RV SAMUDRA RATNA [PC-4]</span>
+<span class="ml-2 px-1.5 py-0.5 border border-outline-variant text-secondary font-data-mono-sm text-data-mono-sm bg-surface-container-low">IMO: 9814422</span>
+</div>
+<!-- Central Navigation Links (Exact labels, Iceberg Inspector ACTIVE) -->
+<nav class="hidden md:flex items-center space-x-6 h-full pt-1">
+<a class="text-secondary hover:text-on-surface font-body-sm text-body-sm pb-1 transition-colors duration-150" href="#">Overview</a>
+<a class="text-secondary hover:text-on-surface font-body-sm text-body-sm pb-1 transition-colors duration-150" href="#">Route Comparison</a>
+<a class="border-b-2 border-primary text-primary font-semibold font-body-sm text-body-sm pb-1" href="#">Iceberg Inspector</a>
+<a class="text-secondary hover:text-on-surface font-body-sm text-body-sm pb-1 transition-colors duration-150" href="#">Voyage Plotting</a>
+</nav>
+<!-- Trailing Actions & Telemetry -->
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1.5 px-2 py-1 bg-surface-container border border-outline-variant">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+<span class="font-data-mono-sm text-data-mono-sm text-on-surface uppercase tracking-wider">SAR Feed Live</span>
+</div>
+<div class="hidden lg:flex items-center gap-1 px-2 py-1 border border-outline-variant bg-surface-container-lowest font-data-mono-sm text-data-mono-sm text-secondary">
+<span class="material-symbols-outlined text-primary text-[14px]" data-icon="sensors">sensors</span>
+<span>69°24'S 76°11'E</span>
+</div>
+<div class="flex items-center gap-1 border-l border-outline-variant pl-3">
+<button class="p-1 hover:bg-surface-container text-secondary hover:text-primary transition-colors duration-150" title="Satellite Uplink Status">
+<span class="material-symbols-outlined text-[18px]" data-icon="satellite_alt">satellite_alt</span>
+</button>
+<button class="p-1 hover:bg-surface-container text-secondary hover:text-primary transition-colors duration-150" title="Tactical Sensor Array">
+<span class="material-symbols-outlined text-[18px]" data-icon="sensors">sensors</span>
+</button>
+<div class="ml-1 pl-2 border-l border-outline-variant flex items-center gap-2">
+<div class="w-6 h-6 border border-primary bg-primary-container text-on-primary font-data-mono-sm text-data-mono-sm flex items-center justify-center font-bold">
+            BWO
+          </div>
+<span class="sr-only">Bridge Watch Officer Identity Token</span>
+</div>
+</div>
+</div>
+</header>
+<!-- ================= MAIN OPERATIONAL MATRIX (12-COLUMN DECK) ================= -->
+<div class="flex-1 flex w-full overflow-hidden">
+<!-- ================= DOCKED SIDE NAV BAR (SHARED COMPONENT JSON) ================= -->
+<aside class="w-64 border-r border-outline-variant bg-surface-container-lowest flex flex-col justify-between shrink-0 hidden lg:flex select-none z-30">
+<!-- Nav Header & Subtext -->
+<div>
+<div class="p-3 border-b border-outline-variant bg-surface-container-low flex items-center justify-between">
+<div>
+<div class="font-label-caps text-label-caps uppercase tracking-wider text-secondary">LAYER REPEATERS</div>
+<div class="font-data-mono-sm text-data-mono-sm text-on-surface-variant font-medium">CONNING MATRIX 1280</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="water">water</span>
+<span class="sr-only">Hydrographic Sounder Repeater</span>
+</div>
+<!-- Layer Repeater Tabs -->
+<div class="py-1">
+<!-- 1: SAR Ice Heatmap -->
+<button class="w-full text-left flex items-center gap-2.5 px-pad-compact py-pad-tight text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-body-sm text-body-sm transition-colors duration-150">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="ac_unit">ac_unit</span>
+<span class="truncate">SAR Ice Heatmap</span>
+</button>
+<!-- 2: Iceberg Drift 72h (ACTIVE STATE) -->
+<button class="w-full text-left flex items-center gap-2.5 px-pad-compact py-pad-tight bg-secondary-container text-on-secondary-fixed border-l-2 border-primary font-semibold font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="cyclone">cyclone</span>
+<span class="truncate">Iceberg Drift 72h</span>
+</button>
+<!-- 3: Bathymetry Isobaths -->
+<button class="w-full text-left flex items-center gap-2.5 px-pad-compact py-pad-tight text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-body-sm text-body-sm transition-colors duration-150">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="water">water</span>
+<span class="truncate">Bathymetry Isobaths</span>
+</button>
+<!-- 4: Pressure Ridges -->
+<button class="w-full text-left flex items-center gap-2.5 px-pad-compact py-pad-tight text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-body-sm text-body-sm transition-colors duration-150">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="warning">warning</span>
+<span class="truncate">Pressure Ridges</span>
+</button>
+<!-- 5: Weather Vectors -->
+<button class="w-full text-left flex items-center gap-2.5 px-pad-compact py-pad-tight text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-body-sm text-body-sm transition-colors duration-150">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="air">air</span>
+<span class="truncate">Weather Vectors</span>
+</button>
+</div>
+<!-- CTA Button -->
+<div class="px-3 pt-3">
+<button class="w-full h-[34px] bg-surface-container-lowest border border-outline-variant hover:border-primary text-primary hover:bg-surface-container font-body-sm text-body-sm font-semibold flex items-center justify-center gap-1.5 transition-colors duration-150">
+<span class="material-symbols-outlined text-[16px]" data-icon="tune">tune</span>
+<span>Waypoint Override</span>
+</button>
+</div>
+</div>
+<!-- Footer Diagnostic Tabs -->
+<div class="border-t border-outline-variant bg-surface-container-lowest p-2 space-y-1">
+<button class="w-full text-left flex items-center gap-2 px-2 py-1.5 text-secondary hover:text-on-surface hover:bg-surface-container font-body-sm text-body-sm transition-colors duration-150">
+<span class="material-symbols-outlined text-[16px]" data-icon="tune">tune</span>
+<span>System Diagnostics</span>
+</button>
+<button class="w-full text-left flex items-center gap-2 px-2 py-1.5 text-secondary hover:text-on-surface hover:bg-surface-container font-body-sm text-body-sm transition-colors duration-150">
+<span class="material-symbols-outlined text-[16px]" data-icon="compass_calibration">compass_calibration</span>
+<span>ECDIS Calibration</span>
+</button>
+</div>
+</aside>
+<!-- ================= CENTER & RIGHT OPERATIONAL CANVAS ================= -->
+<main class="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden bg-background">
+<!-- ================= LEFT: HYDROGRAPHIC MAP & RADAR/SAR PLOT (7 COLUMNS) ================= -->
+<section class="flex-1 lg:w-7/12 flex flex-col border-r border-outline-variant relative bg-hydro-grid">
+<!-- Tactical Header Strip -->
+<div class="h-9 px-3 bg-surface-container-low border-b border-outline-variant flex items-center justify-between z-20 shrink-0">
+<div class="flex items-center gap-3">
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-secondary">RADAR/SAR APERTURE // BAND-X POLARIZATION</span>
+<span class="font-data-mono-sm text-data-mono-sm font-semibold text-primary">SCALE 1:25,000</span>
+<span class="font-data-mono-sm text-data-mono-sm text-secondary">GRID: WGS-84 / UTM-ZONE 43S</span>
+</div>
+<div class="flex items-center gap-2 font-data-mono-sm text-data-mono-sm text-secondary">
+<span>AZIMUTH: 215°T</span>
+<span class="text-outline-variant">|</span>
+<span>SWATH: 45 KM</span>
+</div>
+</div>
+<!-- Interactive Tactical Chart Area -->
+<div class="relative flex-1 min-h-[480px] p-4 flex flex-col justify-between overflow-hidden">
+<!-- Chart Calibration Watermarks & Coordinate Ticks -->
+<div class="absolute top-2 left-2 font-data-mono-sm text-data-mono-sm text-outline pointer-events-none">
+            68°50'00"S<br/>075°10'00"E
+          </div>
+<div class="absolute bottom-2 left-2 font-data-mono-sm text-data-mono-sm text-outline pointer-events-none">
+            69°30'00"S<br/>075°10'00"E
+          </div>
+<div class="absolute top-2 right-2 font-data-mono-sm text-data-mono-sm text-outline pointer-events-none text-right">
+            68°50'00"S<br/>075°35'00"E
+          </div>
+<!-- Top Tactical Badges / Alerts Overlay -->
+<div class="z-10 flex flex-wrap gap-2 items-start pointer-events-none">
+<!-- Grounding Risk Alert Card -->
+<div class="pointer-events-auto bg-surface-container-lowest border border-error p-2.5 shadow-sm max-w-xs">
+<div class="flex items-center gap-1.5 text-error font-label-caps text-label-caps tracking-wider uppercase mb-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="warning">warning</span>
+<span>Grounding Hazard Indicator</span>
+</div>
+<div class="font-data-mono-sm text-data-mono-sm text-on-surface space-y-0.5">
+<div class="flex justify-between">
+<span class="text-secondary">Shoal Ridge Depth:</span>
+<span class="font-semibold text-error">240 m</span>
+</div>
+<div class="flex justify-between">
+<span class="text-secondary">Iceberg Draft (Keel):</span>
+<span class="font-semibold text-on-surface">215 m</span>
+</div>
+<div class="flex justify-between pt-1 border-t border-outline-variant text-[10px]">
+<span class="text-secondary">Net Under-Keel Margin:</span>
+<span class="font-bold text-error">+25 m (CRITICAL REACH)</span>
+</div>
+</div>
+</div>
+<!-- Ship Collision CPA Indicator -->
+<div class="pointer-events-auto bg-surface-container-lowest border border-outline-variant p-2.5 shadow-sm">
+<div class="flex items-center gap-1.5 text-primary font-label-caps text-label-caps tracking-wider uppercase mb-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="radar">radar</span>
+<span>Collision CPA Assessment</span>
+</div>
+<div class="font-data-mono-sm text-data-mono-sm text-on-surface">
+<span class="font-bold text-primary">CPA: 14.8 NM</span> at <span class="font-semibold">T+26h</span>
+<div class="text-[10px] text-[#059669] font-medium flex items-center gap-1 mt-0.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+                  Safe clearance boundary maintained
+                </div>
+</div>
+</div>
+</div>
+<!-- SVG HYDROGRAPHIC CHART: Bathymetry, Iceberg Target, Uncertainty Ellipses, and Dynamic Vectors -->
+<div class="absolute inset-0 z-0 pointer-events-auto cursor-crosshair">
+<svg class="w-full h-full" preserveaspectratio="xMidYMid slice" viewbox="0 0 800 650" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<!-- Bathymetric Isobath Gradients -->
+<lineargradient id="shelfGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#eff4f7" stop-opacity="0.4"></stop>
+<stop offset="100%" stop-color="#cce6f7" stop-opacity="0.6"></stop>
+</lineargradient>
+<pattern height="100" id="radarRings" patternunits="userSpaceOnUse" width="100">
+<circle cx="50" cy="50" fill="none" r="48" stroke="#bec8cc" stroke-dasharray="2 3" stroke-width="0.5"></circle>
+</pattern>
+<marker id="arrowPrimary" markerheight="6" markerwidth="6" orient="auto" refx="5" refy="3">
+<path d="M0,0 L0,6 L6,3 z" fill="#006275"></path>
+</marker>
+<marker id="arrowWind" markerheight="6" markerwidth="6" orient="auto" refx="5" refy="3">
+<path d="M0,0 L0,6 L6,3 z" fill="#7c5000"></path>
+</marker>
+<marker id="arrowCoriolis" markerheight="6" markerwidth="6" orient="auto" refx="5" refy="3">
+<path d="M0,0 L0,6 L6,3 z" fill="#49626f"></path>
+</marker>
+</defs>
+<!-- Radial distance rings from RV Samudra Ratna (PC-4) -->
+<circle cx="680" cy="180" fill="none" r="140" stroke="#bec8cc" stroke-dasharray="4 4" stroke-width="0.75"></circle>
+<circle cx="680" cy="180" fill="none" r="280" stroke="#bec8cc" stroke-dasharray="4 4" stroke-width="0.75"></circle>
+<text fill="#6e797c" font-family="JetBrains Mono" font-size="10" x="685" y="50">20 NM RANGE</text>
+<text fill="#6e797c" font-family="JetBrains Mono" font-size="10" x="685" y="190">10 NM RANGE</text>
+<!-- Bathymetric Depth Contours (Underwater Isobaths) -->
+<!-- 400m Depth line -->
+<path d="M -50 300 C 150 280, 280 340, 420 310 C 580 270, 700 360, 850 330" fill="none" stroke="#b0cada" stroke-width="1.25"></path>
+<text fill="#49626f" font-family="JetBrains Mono" font-size="9" x="50" y="295">ISOBATH -400m</text>
+<!-- 300m Depth line -->
+<path d="M -50 390 C 120 370, 260 420, 390 390 C 540 360, 680 430, 850 410" fill="none" stroke="#7cd3ec" stroke-width="1.25"></path>
+<text fill="#006275" font-family="JetBrains Mono" font-size="9" x="70" y="385">ISOBATH -300m</text>
+<!-- 240m Grounding Ridge Zone (Hazard Shallow Bank) -->
+<path d="M 180 470 C 230 450, 310 470, 380 460 C 420 455, 450 490, 490 510 C 440 550, 340 560, 260 540 Z" fill="#ffdad6" fill-opacity="0.35" stroke="#ba1a1a" stroke-dasharray="3 2" stroke-width="1.5"></path>
+<text fill="#ba1a1a" font-family="JetBrains Mono" font-size="10" font-weight="600" x="250" y="505">GROUNDING SHOAL RIDGE (240m DEPTH)</text>
+<!-- Drift Uncertainty Cone (72-Hour Progression) -->
+<path d="M 280 140 L 150 560 L 390 590 Z" fill="#cce6f7" fill-opacity="0.2" stroke="#0e7c93" stroke-dasharray="3 3" stroke-width="1"></path>
+<!-- Drift Trajectory Spine -->
+<path d="M 280 140 Q 265 240 240 330 T 215 450 T 195 570" fill="none" stroke="#006275" stroke-width="2.5"></path>
+<!-- T+12h Ellipse & Waypoint -->
+<ellipse cx="265" cy="240" fill="#ffffff" fill-opacity="0.6" rx="22" ry="14" stroke="#006275" stroke-width="1" transform="rotate(-15 265 240)"></ellipse>
+<circle cx="265" cy="240" fill="#006275" r="3"></circle>
+<text fill="#171c1f" font-family="JetBrains Mono" font-size="10" font-weight="600" x="290" y="244">T+12h [0.7 kts]</text>
+<!-- T+24h Ellipse & Waypoint -->
+<ellipse cx="240" cy="330" fill="#ffffff" fill-opacity="0.6" rx="36" ry="20" stroke="#006275" stroke-width="1" transform="rotate(-20 240 330)"></ellipse>
+<circle cx="240" cy="330" fill="#006275" r="3"></circle>
+<text fill="#171c1f" font-family="JetBrains Mono" font-size="10" font-weight="600" x="280" y="334">T+24h [0.8 kts / 208°T]</text>
+<!-- T+48h Ellipse & Waypoint (Cautionary near shoal ridge) -->
+<ellipse cx="215" cy="450" fill="#ffddb5" fill-opacity="0.3" rx="55" ry="30" stroke="#7c5000" stroke-width="1.25" transform="rotate(-25 215 450)"></ellipse>
+<circle cx="215" cy="450" fill="#7c5000" r="3.5"></circle>
+<text fill="#7c5000" font-family="JetBrains Mono" font-size="10" font-weight="bold" x="275" y="455">T+48h [1.1 kts // MARGIN: 15m]</text>
+<!-- T+72h Ellipse & Waypoint (Grounding Risk / Intercept) -->
+<ellipse cx="195" cy="570" fill="#ffdad6" fill-opacity="0.35" rx="75" ry="42" stroke="#ba1a1a" stroke-dasharray="2 2" stroke-width="1.5" transform="rotate(-30 195 570)"></ellipse>
+<circle cx="195" cy="570" fill="#ba1a1a" r="4"></circle>
+<text fill="#ba1a1a" font-family="JetBrains Mono" font-size="10" font-weight="bold" x="275" y="575">T+72h [SHOAL INTERCEPT RISK]</text>
+<!-- Target B-31G Present Position (T+00h) -->
+<g transform="translate(280, 140)">
+<!-- Tabular Berg Footprint (Scaled 18.4km x 8.2km outline) -->
+<polygon fill="#ffffff" points="-45,-20 38,-24 48,16 -35,22 -48,8" stroke="#006275" stroke-width="2.5"></polygon>
+<!-- Calving fracture lines on Eastern Face -->
+<path d="M 38 -24 L 28 -5 L 35 10 L 48 16" fill="none" stroke="#ba1a1a" stroke-dasharray="2 1" stroke-width="1.25"></path>
+<!-- Center Pivot Datum -->
+<circle cx="0" cy="0" fill="#ba1a1a" r="3"></circle>
+<circle cx="0" cy="0" fill="none" r="7" stroke="#ba1a1a" stroke-width="1"></circle>
+<!-- Berg Label -->
+<rect fill="#171c1f" height="18" rx="0" width="130" x="-65" y="-45"></rect>
+<text fill="#ffffff" font-family="JetBrains Mono" font-size="10" font-weight="bold" text-anchor="middle" x="0" y="-32">
+                  B-31G (T+00h)
+                </text>
+</g>
+<!-- Environmental Force Vectors emanating from berg center (280, 140) -->
+<!-- 1. Ocean Current Vector (0.8 kts, 215°T) - Blue -->
+<line marker-end="url(#arrowPrimary)" stroke="#006275" stroke-width="2.5" x1="280" x2="225" y1="140" y2="218"></line>
+<text fill="#006275" font-family="JetBrains Mono" font-size="10" font-weight="bold" x="215" y="195">CURRENT: 0.8 kts / 215°T</text>
+<!-- 2. Wind Drag Vector (24 kts, 195°T) - Amber/Brown -->
+<line marker-end="url(#arrowWind)" stroke="#7c5000" stroke-dasharray="4 2" stroke-width="2" x1="280" x2="252" y1="140" y2="245"></line>
+<text fill="#7c5000" font-family="JetBrains Mono" font-size="9" font-weight="bold" x="160" y="225">WIND DRAG: 24 kts / 195°T</text>
+<!-- 3. Coriolis Deflection Vector (Deflection to Left in Southern Hemisphere) - Slate -->
+<line marker-end="url(#arrowCoriolis)" stroke="#49626f" stroke-dasharray="2 2" stroke-width="1.5" x1="280" x2="335" y1="140" y2="175"></line>
+<text fill="#49626f" font-family="JetBrains Mono" font-size="9" x="340" y="178">CORIOLIS (SOUTH)</text>
+<!-- RV Samudra Ratna Position Indicator -->
+<g transform="translate(680, 180)">
+<!-- Ship Symbol -->
+<polygon fill="#006275" points="0,-12 6,8 0,5 -6,8" stroke="#171c1f" stroke-width="1.5"></polygon>
+<circle cx="0" cy="0" fill="none" r="16" stroke="#006275" stroke-dasharray="2 2" stroke-width="1"></circle>
+<rect fill="#eff4f7" height="16" stroke="#bec8cc" stroke-width="1" width="120" x="-60" y="14"></rect>
+<text fill="#171c1f" font-family="JetBrains Mono" font-size="9" font-weight="bold" text-anchor="middle" x="0" y="26">OWN SHIP [PC-4]</text>
+</g>
+<!-- Closest Point of Approach Line (Dashed) -->
+<line stroke="#006275" stroke-dasharray="4 4" stroke-width="1.25" x1="680" x2="240" y1="180" y2="330"></line>
+<rect fill="#ffffff" height="18" stroke="#bec8cc" stroke-width="1" width="110" x="420" y="242"></rect>
+<text fill="#006275" font-family="JetBrains Mono" font-size="9" font-weight="bold" text-anchor="middle" x="475" y="255">
+                CPA: 14.8 NM (T+26h)
+              </text>
+</svg>
+</div>
+<!-- Bottom Floating Map Controls / Coordinate Repeater -->
+<div class="z-10 mt-auto flex flex-wrap items-center justify-between gap-2 pointer-events-none">
+<!-- Force Vector Legend Bar -->
+<div class="pointer-events-auto bg-surface-container-lowest border border-outline-variant p-2 flex items-center gap-4 text-data-mono-sm font-data-mono-sm">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-1 bg-primary inline-block"></span>
+<span class="text-on-surface">Current Form Drag (54%)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-1 bg-tertiary inline-block"></span>
+<span class="text-on-surface">Wind Skin Drag (32%)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-1 bg-secondary inline-block"></span>
+<span class="text-on-surface">Coriolis &amp; Tilt (14%)</span>
+</div>
+</div>
+<!-- Chart Scale & Cursor Position -->
+<div class="pointer-events-auto bg-surface-container-lowest border border-outline-variant px-3 py-1.5 font-data-mono-sm text-data-mono-sm text-secondary flex items-center gap-3">
+<span>CURSOR: <strong class="text-on-surface">69°04'12"S 075°02'44"E</strong></span>
+<span class="text-outline-variant">|</span>
+<span>DEPTH: <strong class="text-on-surface">278 m</strong></span>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= RIGHT: TECHNICAL INSPECTION CONSOLE (5 COLUMNS) ================= -->
+<section class="w-full lg:w-5/12 bg-surface-container-lowest flex flex-col border-l-0 lg:border-l border-outline-variant overflow-y-auto custom-scrollbar">
+<!-- Target Identification Bar (Hydrographic Brass / Steel Instrument Style) -->
+<div class="p-3 bg-surface-container-low border-b border-outline-variant">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-secondary">TARGET SPECIFICATION METRIC</span>
+<span class="font-data-mono-sm text-data-mono-sm px-1.5 py-0.5 bg-error-container text-on-error-container font-semibold border border-error">HAZARD LEVEL 4</span>
+</div>
+<div class="mt-1.5 font-data-mono-md text-data-mono-md font-bold text-on-surface tracking-tight">
+            TARGET #IB-B31G // CAT: TABULAR BERG
+          </div>
+<div class="font-data-mono-sm text-data-mono-sm text-secondary flex items-center gap-2 mt-0.5">
+<span>FIRST OBSERVED: SENTINEL-1A SAR</span>
+<span class="text-outline-variant">•</span>
+<span>VERIFIED: USNIC ICE CENTER</span>
+</div>
+</div>
+<div class="p-4 space-y-4">
+<!-- Physical Dimensions Instrument Readout -->
+<div class="border border-outline-variant bg-surface-container-lowest">
+<div class="h-[26px] px-2.5 bg-surface-container-low border-b border-outline-variant flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-secondary">PHYSICAL DIMENSIONS &amp; HYDROSTATICS</span>
+<span class="font-data-mono-sm text-data-mono-sm text-secondary">UTC 06:42:00</span>
+</div>
+<div class="p-3 grid grid-cols-2 gap-3 text-data-mono-sm font-data-mono-sm">
+<div class="border-b border-dotted border-outline-variant pb-2">
+<div class="text-secondary text-[10px] uppercase">Length / Major Axis</div>
+<div class="text-on-surface font-semibold text-data-mono-md font-data-mono-md">18.4 <span class="text-secondary font-normal text-data-mono-sm">km</span></div>
+</div>
+<div class="border-b border-dotted border-outline-variant pb-2">
+<div class="text-secondary text-[10px] uppercase">Width / Minor Axis</div>
+<div class="text-on-surface font-semibold text-data-mono-md font-data-mono-md">8.2 <span class="text-secondary font-normal text-data-mono-sm">km</span></div>
+</div>
+<div class="border-b border-dotted border-outline-variant pb-2">
+<div class="text-secondary text-[10px] uppercase">Freeboard Elevation</div>
+<div class="text-on-surface font-semibold text-data-mono-md font-data-mono-md">38.0 <span class="text-secondary font-normal text-data-mono-sm">m</span></div>
+</div>
+<div class="border-b border-dotted border-outline-variant pb-2">
+<div class="text-secondary text-[10px] uppercase">Estimated Draft (Subsurface)</div>
+<div class="text-error font-semibold text-data-mono-md font-data-mono-md">215.0 <span class="text-error font-normal text-data-mono-sm">m</span></div>
+</div>
+<div class="col-span-2 pt-1 flex justify-between items-baseline">
+<span class="text-secondary text-[10px] uppercase">Calculated Mass Displacement</span>
+<span class="font-bold text-data-mono-md font-data-mono-md text-primary">~28.6 Gt <span class="font-normal text-data-mono-sm text-secondary">(Gigatonnes)</span></span>
+</div>
+<div class="col-span-2 pt-1 border-t border-dotted border-outline-variant text-[11px] text-on-surface-variant flex items-start gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-tertiary shrink-0 mt-0.5" data-icon="warning">warning</span>
+<span>Keel Geometry: Flat-keeled tabular slab with distinct eastern calving shear fracture. Grounding imminent if depth &lt; 220m.</span>
+</div>
+</div>
+</div>
+<!-- Drift Force Dynamics Breakdown -->
+<div class="border border-outline-variant bg-surface-container-lowest">
+<div class="h-[26px] px-2.5 bg-surface-container-low border-b border-outline-variant flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-secondary">DYNAMIC FORCE CONTRIBUTION MATRIX</span>
+<span class="font-data-mono-sm text-data-mono-sm text-primary">STEADY DRIFT</span>
+</div>
+<div class="p-3 space-y-3 font-data-mono-sm text-data-mono-sm">
+<!-- Water Form Drag -->
+<div>
+<div class="flex justify-between mb-1">
+<span class="text-on-surface font-medium">Water Form Drag (Deep Current 0-200m)</span>
+<span class="font-bold text-primary">54%</span>
+</div>
+<div class="w-full h-2 bg-surface-container border border-outline-variant">
+<div class="h-full bg-primary" style="width: 54%"></div>
+</div>
+<div class="text-[10px] text-secondary mt-0.5">Primary vector driver along 215°T Antarctic Coastal Current</div>
+</div>
+<!-- Wind Skin & Form Drag -->
+<div>
+<div class="flex justify-between mb-1">
+<span class="text-on-surface font-medium">Wind Skin &amp; Sail Drag (Katabatic 24 kts)</span>
+<span class="font-bold text-tertiary">32%</span>
+</div>
+<div class="w-full h-2 bg-surface-container border border-outline-variant">
+<div class="h-full bg-tertiary-container" style="width: 32%"></div>
+</div>
+<div class="text-[10px] text-secondary mt-0.5">Offshore continental wind sheer acting on 38m sail cliff</div>
+</div>
+<!-- Sea Surface Tilt & Coriolis -->
+<div>
+<div class="flex justify-between mb-1">
+<span class="text-on-surface font-medium">Sea Surface Tilt &amp; Coriolis Deflection</span>
+<span class="font-bold text-secondary">14%</span>
+</div>
+<div class="w-full h-2 bg-surface-container border border-outline-variant">
+<div class="h-full bg-secondary" style="width: 14%"></div>
+</div>
+<div class="text-[10px] text-secondary mt-0.5">Leftward polar Coriolis inertial deflection coefficient</div>
+</div>
+</div>
+</div>
+<!-- Drift Trajectory Forecast Table (Monospace tabular structure) -->
+<div class="border border-outline-variant bg-surface-container-lowest">
+<div class="h-[26px] px-2.5 bg-surface-container-low border-b border-outline-variant flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-secondary">DRIFT TRAJECTORY PROJECTIONS [72-HOUR MODEL]</span>
+<span class="font-data-mono-sm text-data-mono-sm text-secondary">ENSEMBLE-4</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-data-mono-sm text-data-mono-sm border-collapse">
+<thead>
+<tr class="border-b border-outline-variant bg-surface-container text-secondary text-[10px] uppercase">
+<th class="py-1.5 px-2">Epoch</th>
+<th class="py-1.5 px-2">Coordinates</th>
+<th class="py-1.5 px-2">Velocity</th>
+<th class="py-1.5 px-2">Grounding Risk / Margin</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant divide-dotted text-on-surface">
+<!-- Row 1: T+00h -->
+<tr class="hover:bg-surface-container-low transition-colors duration-100">
+<td class="py-2 px-2 font-semibold">T+00h</td>
+<td class="py-2 px-2 text-secondary">68°52'S 75°18'E</td>
+<td class="py-2 px-2">0.6 kts / 212°T</td>
+<td class="py-2 px-2">
+<span class="px-1.5 py-0.5 text-[10px] font-medium text-[#059669] bg-[rgba(5,150,105,0.08)] border border-[rgba(5,150,105,0.3)]">
+                        LOW (Margin &gt; 180m)
+                      </span>
+</td>
+</tr>
+<!-- Row 2: T+24h -->
+<tr class="hover:bg-surface-container-low transition-colors duration-100">
+<td class="py-2 px-2 font-semibold">T+24h</td>
+<td class="py-2 px-2 text-secondary">69°01'S 75°04'E</td>
+<td class="py-2 px-2">0.8 kts / 208°T</td>
+<td class="py-2 px-2">
+<span class="text-on-surface font-medium">Shelf Margin: +30 m</span>
+</td>
+</tr>
+<!-- Row 3: T+48h (Caution - Amber) -->
+<tr class="bg-surface-container-low hover:bg-surface-container transition-colors duration-100">
+<td class="py-2 px-2 font-bold text-tertiary">T+48h</td>
+<td class="py-2 px-2 text-secondary">69°12'S 74°46'E</td>
+<td class="py-2 px-2">1.1 kts / 205°T</td>
+<td class="py-2 px-2">
+<span class="px-1.5 py-0.5 text-[10px] font-bold text-[#A9700F] bg-[rgba(169,112,15,0.08)] border border-[rgba(169,112,15,0.3)]">
+                        CAUTION: MARGIN +15 m
+                      </span>
+</td>
+</tr>
+<!-- Row 4: T+72h (Grounding Hazard Intercept) -->
+<tr class="bg-error-container/20 hover:bg-error-container/30 transition-colors duration-100">
+<td class="py-2 px-2 font-bold text-error">T+72h</td>
+<td class="py-2 px-2 text-secondary">69°24'S 74°22'E</td>
+<td class="py-2 px-2 font-bold text-error">0.9 kts / 198°T</td>
+<td class="py-2 px-2">
+<span class="px-1.5 py-0.5 text-[10px] font-bold text-[#B23A2F] bg-[rgba(178,58,47,0.08)] border border-[rgba(178,58,47,0.4)]">
+                        SHOAL RIDGE INTERCEPT
+                      </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Tactical Operational Actions Bar -->
+<div class="pt-2 space-y-2">
+<div class="font-label-caps text-label-caps uppercase tracking-wider text-secondary mb-1">TACTICAL DIRECTIVES</div>
+<div class="grid grid-cols-1 gap-2">
+<!-- Primary Operational Action: Recalculate CPA -->
+<button class="w-full h-9 bg-primary-container hover:bg-[#0A5C6D] active:border active:border-on-background text-on-primary font-body-sm text-body-sm font-semibold flex items-center justify-center gap-2 transition-colors duration-150">
+<span class="material-symbols-outlined text-[18px]" data-icon="calculate">calculate</span>
+<span>Recalculate Ship CPA &amp; Evading Corridor</span>
+</button>
+<!-- Secondary Utility: Broadcast NavTex -->
+<button class="w-full h-9 bg-surface-container-lowest hover:bg-surface-container border border-outline-variant text-on-surface font-body-sm text-body-sm font-medium flex items-center justify-center gap-2 transition-colors duration-150">
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="cell_tower">cell_tower</span>
+<span>Broadcast NavTex Hazard Warning [NAVAREA VII]</span>
+</button>
+<!-- Hazard Action: Flag Critical Hazard -->
+<button class="w-full h-9 bg-surface-container-lowest hover:bg-error hover:text-on-error border border-error text-error font-body-sm text-body-sm font-semibold flex items-center justify-center gap-2 transition-colors duration-150 group">
+<span class="material-symbols-outlined text-[18px] group-hover:text-on-error" data-icon="report">report</span>
+<span>Flag Critical Navigation Hazard (ECDIS Sync)</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- ================= BOTTOM BRIDGE STATUS STRIP ================= -->
+<footer class="h-8 bg-surface-container-low border-t border-outline-variant px-pad-deck flex items-center justify-between font-data-mono-sm text-data-mono-sm text-secondary shrink-0 select-none z-50">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 text-on-surface font-medium">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span>
+<span>CONNING POSITION: BRIDGE WING (STBD)</span>
+</div>
+<span class="text-outline-variant">|</span>
+<span>GYRO 1: <strong class="text-on-surface">218.4°T</strong></span>
+<span class="text-outline-variant">|</span>
+<span>SPEED LOG: <strong class="text-on-surface">11.2 KTS (WATER)</strong></span>
+<span class="text-outline-variant">|</span>
+<span>SONAR TRANSDUCER: <strong class="text-on-surface">420m ACTIVE</strong></span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-on-surface-variant">AIR TEMP: -14.2°C // SEA: -1.8°C</span>
+<span class="text-outline-variant">|</span>
+<span class="text-primary font-semibold">ECDIS INTEGRITY: NOMINAL</span>
+<span class="text-outline-variant">|</span>
+<span class="text-on-surface font-bold">UTC 06:42:19</span>
+</div>
+</footer>
+</body></html>

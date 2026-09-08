@@ -86,6 +86,59 @@ async function startServer() {
     return { fuelKg: Math.round(fuelKg * 10) / 10, hours: Math.round(hours * 10) / 10, speed: Math.round(speed * 10) / 10 };
   }
 
+  // --- Dynamic Python FastAPI Proxy Bridge ---
+  const FASTAPI_URL = process.env.FASTAPI_URL || "http://127.0.0.1:8000";
+  let pythonBackendAvailable = false;
+
+  async function checkPythonBackend() {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 1200);
+      const res = await fetch(`${FASTAPI_URL}/api/health`, { signal: controller.signal });
+      clearTimeout(timeout);
+      if (res.ok) {
+        if (!pythonBackendAvailable) {
+          console.log(`[Bridge] Connected to Python FastAPI backend at ${FASTAPI_URL}`);
+        }
+        pythonBackendAvailable = true;
+      } else {
+        pythonBackendAvailable = false;
+      }
+    } catch {
+      pythonBackendAvailable = false;
+    }
+  }
+  checkPythonBackend();
+  setInterval(checkPythonBackend, 8000);
+
+  // If Python FastAPI is running, proxy API requests to it
+  app.use("/api", async (req, res, next) => {
+    if (pythonBackendAvailable && req.path !== "/health") {
+      try {
+        const targetUrl = `${FASTAPI_URL}/api${req.path}${req.url.includes("?") ? req.url.substring(req.url.indexOf("?")) : ""}`;
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 3500);
+        const options: RequestInit = {
+          method: req.method,
+          headers: { "Content-Type": "application/json" },
+          signal: controller.signal
+        };
+        if (req.method !== "GET" && req.method !== "HEAD" && req.body && Object.keys(req.body).length > 0) {
+          options.body = JSON.stringify(req.body);
+        }
+        const pyRes = await fetch(targetUrl, options);
+        clearTimeout(timeout);
+        if (pyRes.ok) {
+          const data = await pyRes.json();
+          return res.status(pyRes.status).json(data);
+        }
+      } catch (err) {
+        // Fallback to internal Node.js handler if proxy fails
+      }
+    }
+    next();
+  });
+
   // --- API Endpoints ---
 
   // Health Check
@@ -93,6 +146,8 @@ async function startServer() {
     res.json({
       status: "online",
       service: "Antarctic DSS Backend",
+      python_fastapi_connected: pythonBackendAvailable,
+      fastapi_url: FASTAPI_URL,
       version: "1.0.0",
       agency: "MoES / NCPOR",
       target_region: "Weddell Sea & Dronning Maud Land",

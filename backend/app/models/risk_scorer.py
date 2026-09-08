@@ -8,17 +8,34 @@ Replaces arbitrary heuristic weighting with a learned non-linear decision surfac
 trained on historic Polar Code (IMO) incident datasets and vessel transit logs.
 """
 
+import os
 import math
 from typing import Dict, Any
 
 class LearnedNavigationRiskScorer:
     """
-    Learned Risk Model (Logistic / Shallow MLP surrogate)
-    # TODO: fit parameters via ml/train_risk_scorer.py
+    Learned Risk Model (MLPClassifier / Logistic Regression)
+    Auto-loads trained weights from ml/checkpoints/risk_scorer.joblib when present.
     """
 
-    def __init__(self):
-        # Calibrated weights representing empirical vessel risk in polar regimes
+    def __init__(self, model_path: str = None):
+        if model_path is None:
+            default_path = os.path.abspath(
+                os.path.join(os.path.dirname(__file__), "../../../ml/checkpoints/risk_scorer.joblib")
+            )
+            if os.path.exists(default_path):
+                model_path = default_path
+
+        self.model_path = model_path
+        self.ml_model = None
+        if self.model_path and os.path.exists(self.model_path):
+            try:
+                import joblib
+                self.ml_model = joblib.load(self.model_path)
+            except Exception:
+                self.ml_model = None
+
+        # Calibrated weights representing empirical vessel risk in polar regimes (baseline)
         self.w_sic = 3.25          # Sea ice concentration dominance
         self.w_iceberg = 4.80      # Unmitigated iceberg proximity is catastrophic
         self.w_wind = 0.08         # High winds exacerbate drift & ridging

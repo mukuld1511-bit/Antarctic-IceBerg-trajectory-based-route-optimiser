@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>POLARIS DSS // Route Comparison</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Inter & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary": "#006275",
+            "tertiary-fixed-dim": "#feb957",
+            "on-tertiary": "#ffffff",
+            "surface": "#f5fafd",
+            "on-tertiary-fixed-variant": "#633f00",
+            "error": "#ba1a1a",
+            "on-secondary": "#ffffff",
+            "surface-container-low": "#eff4f7",
+            "surface-container-lowest": "#ffffff",
+            "on-background": "#171c1f",
+            "secondary-container": "#cce6f7",
+            "on-primary-container": "#ecfaff",
+            "on-primary": "#ffffff",
+            "surface-container": "#eaeff2",
+            "on-primary-fixed-variant": "#004e5e",
+            "tertiary-fixed": "#ffddb5",
+            "surface-bright": "#f5fafd",
+            "surface-container-high": "#e4e9ec",
+            "outline-variant": "#bec8cc",
+            "surface-tint": "#00687c",
+            "surface-dim": "#d6dbde",
+            "on-tertiary-container": "#fff6f0",
+            "inverse-surface": "#2c3134",
+            "tertiary-container": "#9d6600",
+            "on-tertiary-fixed": "#2a1800",
+            "on-error-container": "#93000a",
+            "primary-container": "#0e7c93",
+            "on-error": "#ffffff",
+            "inverse-on-surface": "#ecf1f4",
+            "on-secondary-container": "#4f6876",
+            "on-secondary-fixed": "#021e2a",
+            "surface-container-highest": "#dee3e6",
+            "secondary": "#49626f",
+            "on-surface-variant": "#3e484c",
+            "primary-fixed-dim": "#7cd3ec",
+            "secondary-fixed-dim": "#b0cada",
+            "on-primary-fixed": "#001f27",
+            "outline": "#6e797c",
+            "tertiary": "#7c5000",
+            "on-surface": "#171c1f",
+            "inverse-primary": "#7cd3ec",
+            "surface-variant": "#dee3e6",
+            "background": "#f5fafd",
+            "error-container": "#ffdad6",
+            "secondary-fixed": "#cce6f7",
+            "primary-fixed": "#b0ecff",
+            "on-secondary-fixed-variant": "#314a57"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "pad-compact": "0.75rem",
+            "grid-hairline": "1px",
+            "pad-deck": "1.5rem",
+            "margin-screen": "1rem",
+            "pad-tight": "0.5rem",
+            "gutter": "1rem",
+            "panel-gap": "0.5rem",
+            "pad-base": "1rem",
+            "pad-micro": "0.25rem"
+          },
+          "fontFamily": {
+            "label-caps": ["Inter"],
+            "display-lg": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-sm": ["Inter"],
+            "data-mono-md": ["JetBrains Mono"],
+            "data-mono-sm": ["JetBrains Mono"],
+            "headline-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "data-mono-lg": ["JetBrains Mono"]
+          },
+          "fontSize": {
+            "label-caps": ["10px", { "lineHeight": "12px", "fontWeight": "600" }],
+            "display-lg": ["32px", { "lineHeight": "38px", "fontWeight": "600" }],
+            "body-lg": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "headline-sm": ["16px", { "lineHeight": "22px", "fontWeight": "600" }],
+            "data-mono-md": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "data-mono-sm": ["11px", { "lineHeight": "14px", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-md": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "data-mono-lg": ["18px", { "lineHeight": "24px", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 16px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+    }
+    /* Hairline nautical chart patterns */
+    .chart-grid {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(190, 200, 204, 0.25) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(190, 200, 204, 0.25) 1px, transparent 1px);
+    }
+    .chart-subgrid {
+      background-size: 8px 8px;
+      background-image: 
+        linear-gradient(to right, rgba(190, 200, 204, 0.12) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(190, 200, 204, 0.12) 1px, transparent 1px);
+    }
+    /* Dotted partition divider */
+    .dotted-split {
+      border-bottom: 1px dotted #bec8cc;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface overflow-hidden w-screen h-screen select-none antialiased flex flex-col font-body-sm text-body-sm">
+<!-- ================================================================= -->
+<!-- TOP APP BAR (Shared Component: TopNavBar)                         -->
+<!-- ================================================================= -->
+<header class="flex justify-between items-center w-full px-pad-deck h-12 border-b border-outline-variant bg-surface-container-lowest z-50 flex-shrink-0">
+<!-- Brand & Vessel Telemetry Anchor -->
+<div class="flex items-center gap-pad-base">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 bg-primary-container inline-block"></span>
+<span class="text-headline-sm font-headline-sm font-semibold tracking-tight text-on-surface">
+          POLARIS DSS // RV SAMUDRA RATNA [PC-4]
+        </span>
+</div>
+<div class="h-4 w-[1px] bg-outline-variant"></div>
+<span class="font-data-mono-sm text-data-mono-sm text-secondary bg-surface-container px-1.5 py-0.5 border border-outline-variant">
+        CONNING SYS // L3 POLAR INTEGRATION
+      </span>
+</div>
+<!-- Navigation Tabs (Route Comparison Active) -->
+<nav class="hidden md:flex items-center gap-6 h-full pt-1">
+<a class="text-secondary hover:text-on-surface text-body-sm font-body-sm pb-1 flex items-center gap-1 transition-colors duration-150" href="#">
+        Overview
+      </a>
+<a class="border-b-2 border-primary text-primary font-semibold text-body-sm font-body-sm pb-1 flex items-center gap-1" href="#">
+        Route Comparison
+      </a>
+<a class="text-secondary hover:text-on-surface text-body-sm font-body-sm pb-1 flex items-center gap-1 transition-colors duration-150" href="#">
+        Iceberg Inspector
+      </a>
+<a class="text-secondary hover:text-on-surface text-body-sm font-body-sm pb-1 flex items-center gap-1 transition-colors duration-150" href="#">
+        Voyage Plotting
+      </a>
+</nav>
+<!-- Trailing Actions & Coordinates -->
+<div class="flex items-center gap-3">
+<!-- Live Coordinate Telemetry -->
+<div class="flex items-center gap-1.5 px-2 py-1 bg-surface-container-low border border-outline-variant font-data-mono-sm text-data-mono-sm text-secondary">
+<span class="material-symbols-outlined text-primary text-[15px]" data-icon="farsight_digital">farsight_digital</span>
+<span>69°24'S 76°11'E</span>
+</div>
+<!-- Live SAR Feed Badge -->
+<div class="flex items-center gap-1.5 px-2 py-1 bg-surface-container-low border border-outline-variant font-data-mono-sm text-data-mono-sm text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="material-symbols-outlined text-[15px]" data-icon="satellite_alt">satellite_alt</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">SAR Feed Live</span>
+</div>
+<!-- Icon Quick Triggers -->
+<div class="flex items-center border border-outline-variant divide-x divide-outline-variant bg-surface-container-lowest">
+<button class="p-1.5 hover:bg-surface-container text-secondary hover:text-primary transition-colors duration-150" title="Sensors Matrix">
+<span class="material-symbols-outlined text-[16px]" data-icon="sensors">sensors</span>
+</button>
+</div>
+<!-- Profile Token -->
+<div class="flex items-center pl-1">
+<div class="w-7 h-7 bg-surface-container-high border border-outline-variant flex items-center justify-center font-label-caps text-label-caps font-semibold text-secondary" title="Bridge Watch Officer Identity Token">
+          BWO
+        </div>
+</div>
+</div>
+</header>
+<!-- ================================================================= -->
+<!-- MAIN WORKSPACE CONTAINER                                          -->
+<!-- ================================================================= -->
+<div class="flex-1 flex overflow-hidden relative">
+<!-- =============================================================== -->
+<!-- LEFT REPEATER NAV (Shared Component: SideNavBar)                 -->
+<!-- =============================================================== -->
+<aside class="w-60 flex flex-col justify-between border-r border-outline-variant bg-surface-container-lowest z-40 flex-shrink-0">
+<div class="flex flex-col">
+<!-- Header -->
+<div class="px-pad-compact py-pad-tight border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<div>
+<div class="text-label-caps font-label-caps font-semibold text-secondary tracking-widest">LAYER REPEATERS</div>
+<div class="font-data-mono-sm text-data-mono-sm text-secondary">CONNING MATRIX 1280</div>
+</div>
+<span class="material-symbols-outlined text-secondary" data-icon="water" data-weight="fill" style="font-variation-settings: 'FILL' 1;">water</span>
+</div>
+<!-- Layer Tabs -->
+<nav class="flex flex-col py-1">
+<button class="flex items-center justify-between text-left bg-secondary-container text-on-secondary-fixed border-l-2 border-primary font-semibold text-body-sm font-body-sm px-pad-compact py-pad-tight transition-colors duration-100">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="ac_unit">ac_unit</span>
+              SAR Ice Heatmap
+            </span>
+<span class="font-data-mono-sm text-data-mono-sm text-primary font-semibold">SIC 9/10</span>
+</button>
+<button class="flex items-center justify-between text-left text-on-surface-variant hover:text-on-surface hover:bg-surface-container text-body-sm font-body-sm px-pad-compact py-pad-tight transition-colors duration-150">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[16px]" data-icon="cyclone">cyclone</span>
+              Iceberg Drift 72h
+            </span>
+<span class="font-data-mono-sm text-data-mono-sm text-tertiary font-medium">B-31G</span>
+</button>
+<button class="flex items-center justify-between text-left text-on-surface-variant hover:text-on-surface hover:bg-surface-container text-body-sm font-body-sm px-pad-compact py-pad-tight transition-colors duration-150">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[16px]" data-icon="water">water</span>
+              Bathymetry Isobaths
+            </span>
+<span class="font-data-mono-sm text-data-mono-sm text-secondary">420m</span>
+</button>
+<button class="flex items-center justify-between text-left text-on-surface-variant hover:text-on-surface hover:bg-surface-container text-body-sm font-body-sm px-pad-compact py-pad-tight transition-colors duration-150">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-[16px]" data-icon="warning">warning</span>
+              Pressure Ridges
+            </span>
+<span class="font-data-mono-sm text-data-mono-sm text-error font-medium">HIGH</span>
+</button>
+<button class="flex items-center justify-between text-left text-on-surface-variant hover:text-on-surface hover:bg-surface-container text-body-sm font-body-sm px-pad-compact py-pad-tight transition-colors duration-150">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[16px]" data-icon="air">air</span>
+              Weather Vectors
+            </span>
+<span class="font-data-mono-sm text-data-mono-sm text-secondary">38kts SE</span>
+</button>
+</nav>
+<!-- Icebreaker Assist Status Widget -->
+<div class="mx-pad-compact my-2 p-2 border border-outline-variant bg-surface-container-low">
+<div class="flex justify-between items-center mb-1">
+<span class="font-label-caps text-label-caps uppercase text-secondary">ICE ASSIST ESCORT</span>
+<span class="font-data-mono-sm text-data-mono-sm text-primary font-medium">IB POLAR STAR</span>
+</div>
+<div class="text-[11px] leading-tight text-on-surface-variant">Rendezvous Box: 68°10'S 74°20'E</div>
+<div class="mt-1.5 flex items-center justify-between font-data-mono-sm text-[10px] text-secondary border-t border-outline-variant pt-1">
+<span>DIST: 42.4 NM</span>
+<span class="text-primary font-medium">ETA: 03h 15m</span>
+</div>
+</div>
+</div>
+<!-- Action Button & Footer Tabs -->
+<div class="flex flex-col border-t border-outline-variant bg-surface-container-lowest">
+<div class="p-pad-compact">
+<button class="w-full h-9 bg-primary-container text-on-primary hover:bg-primary transition-colors duration-150 flex items-center justify-center gap-2 font-headline-sm text-body-sm font-semibold rounded-none">
+<span class="material-symbols-outlined text-[16px]" data-icon="tune">tune</span>
+            Waypoint Override
+          </button>
+</div>
+<div class="divide-y divide-outline-variant border-t border-outline-variant">
+<button class="w-full flex items-center gap-2 px-pad-compact py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-body-sm text-body-sm transition-colors duration-150 text-left">
+<span class="material-symbols-outlined text-secondary text-[15px]" data-icon="tune">tune</span>
+            System Diagnostics
+          </button>
+<button class="w-full flex items-center gap-2 px-pad-compact py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-body-sm text-body-sm transition-colors duration-150 text-left">
+<span class="material-symbols-outlined text-secondary text-[15px]" data-icon="compass_calibration">compass_calibration</span>
+            ECDIS Calibration
+          </button>
+</div>
+</div>
+</aside>
+<!-- =============================================================== -->
+<!-- CENTRAL FULL-BLEED POLAR NAUTICAL CHART CANVAS                  -->
+<!-- =============================================================== -->
+<main class="flex-1 relative bg-surface-dim overflow-hidden flex flex-col">
+<!-- Chart Viewport (Simulated Hydrographic Coordinate Surface) -->
+<div class="w-full h-full relative chart-grid chart-subgrid bg-[#dbe4ea] overflow-hidden">
+<!-- Hydrographic Chart SVG Layer: Bathymetry, Pack Ice Zones, Drift Cones, Tracks -->
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="none" viewbox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<!-- Pack Ice Zone Texture Pattern -->
+<pattern height="16" id="pack-ice-hatch" patterntransform="rotate(45 0 0)" patternunits="userSpaceOnUse" width="16">
+<line stroke="#b0cada" stroke-width="1.5" x1="0" x2="0" y1="0" y2="16"></line>
+<line opacity="0.3" stroke="#93000a" stroke-dasharray="2,2" stroke-width="0.5" x1="8" x2="8" y1="0" y2="16"></line>
+</pattern>
+<!-- Heavy Ridge Pattern -->
+<pattern height="20" id="ridge-stipple" patternunits="userSpaceOnUse" width="20">
+<circle cx="4" cy="4" fill="#ba1a1a" opacity="0.25" r="1.5"></circle>
+<circle cx="14" cy="14" fill="#ba1a1a" opacity="0.3" r="2"></circle>
+<circle cx="16" cy="6" fill="#ba1a1a" opacity="0.2" r="1"></circle>
+</pattern>
+<!-- Iceberg Drift Cone Gradient -->
+<lineargradient id="drift-cone-grad" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#9d6600" stop-opacity="0.35"></stop>
+<stop offset="100%" stop-color="#feb957" stop-opacity="0.05"></stop>
+</lineargradient>
+<!-- Polynya Clear Channel Gradient -->
+<lineargradient id="polynya-lead-grad" x1="0%" x2="100%" y1="100%" y2="0%">
+<stop offset="0%" stop-color="#0e7c93" stop-opacity="0.18"></stop>
+<stop offset="100%" stop-color="#cce6f7" stop-opacity="0.08"></stop>
+</lineargradient>
+</defs>
+<!-- Bathymetric Depth Contours (Hairline Isobaths) -->
+<path d="M-50,600 Q200,580 400,520 T750,420 T1050,380" fill="none" stroke="#b0cada" stroke-dasharray="3,3" stroke-width="1"></path>
+<text fill="#49626f" font-family="JetBrains Mono" font-size="9" opacity="0.7" x="320" y="540">1000m ISOBATH</text>
+<path d="M-50,660 Q220,620 450,560 T820,490 T1050,440" fill="none" stroke="#b0cada" stroke-width="1"></path>
+<text fill="#49626f" font-family="JetBrains Mono" font-size="9" opacity="0.7" x="520" y="565">500m CONTINENTAL SHELF</text>
+<path d="M120,700 Q350,670 560,610 T920,550 T1050,520" fill="none" stroke="#6e797c" stroke-width="1.2"></path>
+<text fill="#3e484c" font-family="JetBrains Mono" font-size="9" font-weight="600" x="700" y="605">200m FAST ICE BOUNDARY</text>
+<!-- Heavy Multi-Year Pack Ice Area (SIC 9/10) -->
+<path d="M220,180 Q380,120 620,150 T880,320 L860,490 Q580,450 360,430 Z" fill="url(#pack-ice-hatch)" opacity="0.85" stroke="#bec8cc" stroke-width="1"></path>
+<!-- High-Risk Pressure Ridge Core -->
+<path d="M420,230 Q530,200 680,240 T760,340 Q620,380 480,330 Z" fill="url(#ridge-stipple)" opacity="0.75" stroke="#ba1a1a" stroke-dasharray="4,2" stroke-width="1"></path>
+<rect fill="#ffffff" height="22" stroke="#ba1a1a" stroke-width="1" width="168" x="490" y="270"></rect>
+<text fill="#ba1a1a" font-family="JetBrains Mono" font-size="9" font-weight="600" x="498" y="285">HIGH-PRESSURE RIDGES (3.8m)</text>
+<!-- Coastal Polynya & Fractured Lead Zone (Open Water Pathway) -->
+<path d="M160,450 Q320,440 500,490 T800,460 T980,520 L940,640 Q680,590 400,580 L180,560 Z" fill="url(#polynya-lead-grad)" stroke="#0e7c93" stroke-dasharray="6,3" stroke-width="1"></path>
+<text fill="#006275" font-family="Inter" font-size="10" font-weight="600" letter-spacing="1" x="250" y="475">PRYDZ CHANNEL OPEN POLYNYA LEAD (FRACTURED SIC 2/10)</text>
+<!-- Tabular Iceberg B-31G & 72h Drift Uncertainty Cone -->
+<!-- Drift Cone Path -->
+<polygon fill="url(#drift-cone-grad)" points="560,260 740,160 810,310" stroke="#9d6600" stroke-dasharray="3,3" stroke-width="1"></polygon>
+<line stroke="#7c5000" stroke-dasharray="4,2" stroke-width="1.5" x1="560" x2="770" y1="260" y2="235"></line>
+<!-- Iceberg Symbol -->
+<polygon fill="#ffffff" points="555,250 575,254 570,272 550,268" stroke="#7c5000" stroke-width="1.5"></polygon>
+<circle cx="560" cy="260" fill="none" r="14" stroke="#7c5000" stroke-dasharray="2,2" stroke-width="1"></circle>
+<!-- Iceberg Annotation Card -->
+<rect fill="#ffffff" height="42" stroke="#6e797c" stroke-width="1" width="155" x="580" y="240"></rect>
+<rect fill="#eff4f7" height="14" width="155" x="580" y="240"></rect>
+<text fill="#171c1f" font-family="Inter" font-size="9" font-weight="600" x="586" y="250">TABULAR ICEBERG B-31G</text>
+<text fill="#7c5000" font-family="JetBrains Mono" font-size="8.5" x="586" y="266">DRIFT: 2.1 kts / 074°T</text>
+<text fill="#ba1a1a" font-family="JetBrains Mono" font-size="8.5" x="586" y="277">RADAR LENGTH: 18.2 NM</text>
+<!-- =========================================================== -->
+<!-- TRACK A (Naive Great-Circle Track - Direct)                  -->
+<!-- =========================================================== -->
+<!-- Direct route line cutting straight into heavy ice pack -->
+<path d="M120,380 L350,310 L580,265 L840,240" fill="none" stroke="#ba1a1a" stroke-dasharray="7,4" stroke-width="2.5"></path>
+<!-- Track A Waypoints -->
+<!-- WP A-01 -->
+<circle cx="120" cy="380" fill="#ffffff" r="4" stroke="#ba1a1a" stroke-width="2"></circle>
+<!-- WP A-02 In Hazard Area -->
+<circle cx="350" cy="310" fill="#ba1a1a" r="4" stroke="#ffffff" stroke-width="1.5"></circle>
+<!-- WP A-03 Collision Cone Direct Intersect -->
+<circle cx="580" cy="265" fill="#ba1a1a" r="5" stroke="#ffffff" stroke-width="1.5"></circle>
+<!-- Track A End WP -->
+<circle cx="840" cy="240" fill="#ba1a1a" r="4" stroke="#ffffff" stroke-width="1.5"></circle>
+<!-- Track A Hazard Intersect Alert Marker -->
+<polygon fill="#ba1a1a" points="576,238 584,238 580,230"></polygon>
+<rect fill="#ffdad6" height="20" stroke="#ba1a1a" stroke-width="1" width="130" x="520" y="208"></rect>
+<text fill="#93000a" font-family="JetBrains Mono" font-size="8.5" font-weight="600" x="526" y="222">CRITICAL INTERCEPT B-31G</text>
+<!-- Track A Label Tag -->
+<rect fill="#ffffff" height="24" stroke="#ba1a1a" stroke-width="1" width="175" x="230" y="325"></rect>
+<text fill="#ba1a1a" font-family="Inter" font-size="9" font-weight="700" x="236" y="337">TRACK A (NAIVE GREAT-CIRCLE)</text>
+<text fill="#3e484c" font-family="JetBrains Mono" font-size="8" x="236" y="346">2,410 NM // 11d 04h // RIO: -12.4</text>
+<!-- =========================================================== -->
+<!-- TRACK B (POLARIS AI-Recommended Route)                     -->
+<!-- =========================================================== -->
+<!-- Curving safely around the ice pack through coastal polynya -->
+<path d="M120,380 Q240,430 360,490 T640,510 T810,410 T920,290" fill="none" stroke="#0e7c93" stroke-linecap="square" stroke-width="3"></path>
+<!-- Track B Waypoints -->
+<!-- WP B-ORIGIN -->
+<circle cx="120" cy="380" fill="#0e7c93" r="5" stroke="#ffffff" stroke-width="2"></circle>
+<text fill="#171c1f" font-family="JetBrains Mono" font-size="10" font-weight="600" x="80" y="370">WP-01 [ENTRY]</text>
+<!-- WP B-02 (Divergence South) -->
+<circle cx="360" cy="490" fill="#ffffff" r="4" stroke="#0e7c93" stroke-width="2"></circle>
+<text fill="#006275" font-family="JetBrains Mono" font-size="9" font-weight="600" x="368" y="502">WP-02 (POLY-IN)</text>
+<text fill="#49626f" font-family="JetBrains Mono" font-size="8" x="368" y="512">68°18'S 72°15'E</text>
+<!-- WP B-03 (Lead Apex) -->
+<circle cx="640" cy="510" fill="#ffffff" r="4" stroke="#0e7c93" stroke-width="2"></circle>
+<text fill="#006275" font-family="JetBrains Mono" font-size="9" font-weight="600" x="646" y="525">WP-03 (PRYDZ GATE)</text>
+<text fill="#49626f" font-family="JetBrains Mono" font-size="8" x="646" y="535">69°02'S 75°40'E</text>
+<!-- WP B-04 (Icebreaker Rendezvous) -->
+<rect fill="#0e7c93" height="12" stroke="#ffffff" stroke-width="1.5" width="12" x="804" y="404"></rect>
+<text fill="#006275" font-family="JetBrains Mono" font-size="9" font-weight="600" x="822" y="412">WP-04 [IB ESCORT BOX]</text>
+<text fill="#49626f" font-family="JetBrains Mono" font-size="8" x="822" y="422">SPEED: 11.2 kts CONVOY</text>
+<!-- WP B-TERM (Bharati Station Approach) -->
+<circle cx="920" cy="290" fill="#059669" r="6" stroke="#ffffff" stroke-width="2"></circle>
+<rect fill="#ffffff" height="26" stroke="#006275" stroke-width="1.5" width="140" x="850" y="258"></rect>
+<text fill="#006275" font-family="Inter" font-size="9.5" font-weight="700" x="856" y="271">BHARATI STATION ROADS</text>
+<text fill="#3e484c" font-family="JetBrains Mono" font-size="8" x="856" y="280">69°24.4'S 76°11.3'E // BERTH</text>
+<!-- Track B AI Optimized Callout Badge -->
+<g transform="translate(420, 440)">
+<rect fill="#ffffff" height="32" stroke="#0e7c93" stroke-width="1.5" width="185" x="0" y="0"></rect>
+<rect fill="#0e7c93" height="32" width="4" x="0" y="0"></rect>
+<text fill="#006275" font-family="Inter" font-size="9.5" font-weight="700" x="10" y="14">POLARIS AI RECOMMENDED</text>
+<text fill="#059669" font-family="JetBrains Mono" font-size="8.5" font-weight="600" x="10" y="25">-57H TRANSIT // RIO: +6.2 (SAFE)</text>
+</g>
+<!-- Latitude / Longitude Graticule Tick Labels -->
+<text fill="#6e797c" font-family="JetBrains Mono" font-size="9" x="15" y="150">67°00'S</text>
+<line stroke="#bec8cc" stroke-dasharray="2,4" stroke-width="0.5" x1="0" x2="1000" y1="155" y2="155"></line>
+<text fill="#6e797c" font-family="JetBrains Mono" font-size="9" x="15" y="320">68°00'S</text>
+<line stroke="#bec8cc" stroke-dasharray="2,4" stroke-width="0.5" x1="0" x2="1000" y1="325" y2="325"></line>
+<text fill="#6e797c" font-family="JetBrains Mono" font-size="9" x="15" y="490">69°00'S</text>
+<line stroke="#bec8cc" stroke-dasharray="2,4" stroke-width="0.5" x1="0" x2="1000" y1="495" y2="495"></line>
+<text fill="#6e797c" font-family="JetBrains Mono" font-size="9" x="200" y="690">70°00'E</text>
+<text fill="#6e797c" font-family="JetBrains Mono" font-size="9" x="500" y="690">73°00'E</text>
+<text fill="#6e797c" font-family="JetBrains Mono" font-size="9" x="800" y="690">76°00'E</text>
+</svg>
+<!-- Floating Chart Controls (Top Left of Chart) -->
+<div class="absolute top-3 left-3 flex flex-col gap-1 z-20">
+<div class="bg-surface-container-lowest border border-outline-variant p-1 flex items-center gap-1 shadow-sm">
+<button class="p-1.5 hover:bg-surface-container text-on-surface" title="Zoom In">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span>
+</button>
+<div class="h-4 w-[1px] bg-outline-variant"></div>
+<button class="p-1.5 hover:bg-surface-container text-on-surface" title="Zoom Out">
+<span class="material-symbols-outlined text-[16px]" data-icon="remove">remove</span>
+</button>
+<div class="h-4 w-[1px] bg-outline-variant"></div>
+<button class="p-1.5 hover:bg-surface-container text-primary font-semibold font-data-mono-sm text-data-mono-sm px-2" title="Reset View">
+              1:250,000
+            </button>
+<div class="h-4 w-[1px] bg-outline-variant"></div>
+<button class="p-1.5 hover:bg-surface-container text-on-surface" title="Center Vessel">
+<span class="material-symbols-outlined text-[16px]" data-icon="my_location">my_location</span>
+</button>
+</div>
+<!-- Chart Mode Badges -->
+<div class="flex gap-1">
+<span class="bg-surface-container-lowest border border-outline-variant px-1.5 py-0.5 font-label-caps text-label-caps uppercase text-secondary">
+              PROJECTION: WGS 84 POLAR STEREOGRAPHIC
+            </span>
+<span class="bg-surface-container-lowest border border-outline-variant px-1.5 py-0.5 font-label-caps text-label-caps uppercase text-primary font-semibold">
+              HDG UP: 142°T
+            </span>
+</div>
+</div>
+<!-- Compass Rose & True North Repeater (Bottom Left of Chart) -->
+<div class="absolute bottom-4 left-4 z-20 pointer-events-none">
+<div class="w-28 h-28 bg-surface-container-lowest border border-outline-variant p-2 flex flex-col items-center justify-center relative shadow-sm pointer-events-auto">
+<!-- Outer Dial Ring -->
+<div class="w-20 h-20 rounded-full border border-outline-variant flex items-center justify-center relative">
+<!-- Degree Markers -->
+<span class="absolute -top-1 font-data-mono-sm text-[9px] font-bold text-error">N</span>
+<span class="absolute -bottom-1 font-data-mono-sm text-[8px] text-secondary">S</span>
+<span class="absolute -right-1 font-data-mono-sm text-[8px] text-secondary">E</span>
+<span class="absolute -left-1 font-data-mono-sm text-[8px] text-secondary">W</span>
+<!-- Inner Crosshairs -->
+<div class="w-full h-[1px] bg-outline-variant absolute"></div>
+<div class="h-full w-[1px] bg-outline-variant absolute"></div>
+<!-- Brass Needle Needle -->
+<div class="w-1.5 h-14 bg-transparent border-t-[24px] border-t-primary border-l-[3px] border-l-transparent border-r-[3px] border-r-transparent border-b-[24px] border-b-secondary transform -rotate-12"></div>
+</div>
+<div class="mt-1 font-data-mono-sm text-[9px] text-on-surface-variant font-medium">
+              VAR: 54°22'W (2024)
+            </div>
+</div>
+</div>
+<!-- Legend Overlay (Bottom Center of Chart) -->
+<div class="absolute bottom-4 left-36 z-20 bg-surface-container-lowest border border-outline-variant px-3 py-1.5 flex items-center gap-4 text-[11px]">
+<div class="flex items-center gap-1.5">
+<span class="w-5 h-0.5 bg-error border-b border-dashed border-error inline-block"></span>
+<span class="font-medium text-secondary">Track A (Naive GC)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-5 h-1 bg-primary inline-block"></span>
+<span class="font-semibold text-primary">Track B (POLARIS AI)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 bg-[#cce6f7] border border-primary inline-block"></span>
+<span class="text-secondary">Fractured Polynya</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 bg-tertiary-fixed border border-tertiary inline-block"></span>
+<span class="text-secondary">Iceberg 72h Drift</span>
+</div>
+</div>
+</div>
+</main>
+<!-- =============================================================== -->
+<!-- RIGHT ARBITRATION PANEL (Crisp Chart-Paper Instrument Styling)   -->
+<!-- =============================================================== -->
+<section class="w-[380px] bg-surface-container-lowest border-l border-outline-variant flex flex-col justify-between z-30 flex-shrink-0 shadow-sm overflow-y-auto">
+<!-- Panel Header Bar -->
+<div>
+<div class="h-8 bg-surface-container-low border-b border-outline-variant px-pad-compact flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 bg-primary inline-block"></span>
+<h2 class="text-label-caps font-label-caps uppercase text-secondary font-semibold tracking-wider">
+              VOYAGE TRACK ARBITRATION
+            </h2>
+</div>
+<span class="font-data-mono-sm text-data-mono-sm text-secondary">UTC 06:42</span>
+</div>
+<div class="px-pad-compact py-2 border-b border-outline-variant bg-surface-container-lowest">
+<div class="text-headline-sm font-headline-sm font-semibold text-on-surface">
+            CAPE TOWN TO BHARATI STATION
+          </div>
+<div class="font-data-mono-sm text-data-mono-sm text-secondary flex items-center justify-between mt-0.5">
+<span>EXPEDITION LEG: SOUTH 4</span>
+<span class="text-primary font-medium">VESSEL: PC-4 POLAR CLASS</span>
+</div>
+</div>
+<!-- Matrix Summary Banner -->
+<div class="p-pad-compact bg-surface-container-low border-b border-outline-variant">
+<div class="text-label-caps font-label-caps uppercase text-secondary mb-1">ARBITRATION VERDICT</div>
+<div class="flex items-center justify-between bg-surface-container-lowest border border-primary p-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="check_circle">check_circle</span>
+<div>
+<div class="font-headline-sm text-body-sm font-semibold text-primary">ROUTE B DOMINANT</div>
+<div class="font-data-mono-sm text-[10px] text-secondary">CLEARANCE CONFIRMED VIA SAR PASS</div>
+</div>
+</div>
+<div class="text-right">
+<div class="font-data-mono-md text-data-mono-md font-semibold text-primary">-57.0 HRS</div>
+<div class="font-data-mono-sm text-[10px] text-secondary">SAVINGS NET</div>
+</div>
+</div>
+</div>
+<!-- Comparative Telemetry Matrix Table -->
+<div class="p-pad-compact flex flex-col gap-2">
+<div class="flex justify-between items-center text-label-caps font-label-caps uppercase text-secondary px-1">
+<span>PARAMETER MATRIX</span>
+<span>TRACK A (NAIVE) vs TRACK B (AI)</span>
+</div>
+<!-- Parameter 1: Distance -->
+<div class="border border-outline-variant bg-surface-container-lowest">
+<div class="h-6 bg-surface-container-low px-2 flex justify-between items-center text-label-caps font-label-caps text-secondary">
+<span>VOYAGE DISTANCE</span>
+<span class="font-data-mono-sm text-data-mono-sm text-secondary">+78 NM (+3.2%)</span>
+</div>
+<div class="grid grid-cols-2 divide-x divide-outline-variant p-2 font-data-mono-md text-data-mono-md">
+<div class="flex flex-col">
+<span class="text-[10px] font-label-caps text-secondary uppercase">TRACK A (DIRECT)</span>
+<span class="font-semibold text-on-surface">2,410 NM</span>
+</div>
+<div class="flex flex-col pl-2">
+<span class="text-[10px] font-label-caps text-primary uppercase font-semibold">TRACK B (AI LEAD)</span>
+<span class="font-semibold text-primary">2,488 NM</span>
+</div>
+</div>
+</div>
+<!-- Parameter 2: Transit Time -->
+<div class="border border-outline-variant bg-surface-container-lowest">
+<div class="h-6 bg-surface-container-low px-2 flex justify-between items-center text-label-caps font-label-caps text-secondary">
+<span>PROJECTED TRANSIT TIME</span>
+<span class="font-data-mono-sm text-data-mono-sm text-primary font-semibold">-57 HOURS SAVED</span>
+</div>
+<div class="grid grid-cols-2 divide-x divide-outline-variant p-2 font-data-mono-md text-data-mono-md">
+<div class="flex flex-col">
+<span class="text-[10px] font-label-caps text-secondary uppercase">TRACK A</span>
+<span class="font-semibold text-error">11d 04h</span>
+<span class="text-[9px] text-secondary font-body-sm leading-tight">severe ice friction &amp; ram</span>
+</div>
+<div class="flex flex-col pl-2">
+<span class="text-[10px] font-label-caps text-primary uppercase font-semibold">TRACK B (AI)</span>
+<span class="font-semibold text-primary">8d 19h</span>
+<span class="text-[9px] text-secondary font-body-sm leading-tight">continuous lead cruising</span>
+</div>
+</div>
+</div>
+<!-- Parameter 3: Fuel Oil (HFO) Burn -->
+<div class="border border-outline-variant bg-surface-container-lowest">
+<div class="h-6 bg-surface-container-low px-2 flex justify-between items-center text-label-caps font-label-caps text-secondary">
+<span>HEAVY FUEL OIL (HFO) BURN</span>
+<span class="font-data-mono-sm text-data-mono-sm text-primary font-semibold">-$48,100 SAVED</span>
+</div>
+<div class="grid grid-cols-2 divide-x divide-outline-variant p-2 font-data-mono-md text-data-mono-md">
+<div class="flex flex-col">
+<span class="text-[10px] font-label-caps text-secondary uppercase">TRACK A</span>
+<span class="font-semibold text-on-surface">242.8 MT</span>
+<span class="text-[9px] text-secondary font-body-sm">85% MCR propulsion load</span>
+</div>
+<div class="flex flex-col pl-2">
+<span class="text-[10px] font-label-caps text-primary uppercase font-semibold">TRACK B (AI)</span>
+<span class="font-semibold text-primary">186.2 MT</span>
+<span class="text-[9px] text-primary font-body-sm">-56.6 MT reduced load</span>
+</div>
+</div>
+</div>
+<!-- Parameter 4: POLARIS Risk Index (RIO) -->
+<div class="border border-outline-variant bg-surface-container-lowest">
+<div class="h-6 bg-surface-container-low px-2 flex justify-between items-center text-label-caps font-label-caps text-secondary">
+<span>POLARIS RISK INDEX (RIO)</span>
+<span class="font-data-mono-sm text-data-mono-sm text-secondary">IMO POLAR CODE STANDARD</span>
+</div>
+<div class="grid grid-cols-2 divide-x divide-outline-variant p-2 font-data-mono-md text-data-mono-md">
+<div class="flex flex-col">
+<span class="text-[10px] font-label-caps text-secondary uppercase">TRACK A</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="px-1 py-0.5 bg-error-container text-on-error-container border border-error font-semibold text-data-mono-sm font-data-mono-sm">
+                    -12.4
+                  </span>
+<span class="text-[9px] text-error font-medium leading-none">CRITICAL RISK</span>
+</div>
+</div>
+<div class="flex flex-col pl-2">
+<span class="text-[10px] font-label-caps text-primary uppercase font-semibold">TRACK B (AI)</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="px-1 py-0.5 bg-surface-container text-primary border border-primary font-semibold text-data-mono-sm font-data-mono-sm">
+                    +6.2
+                  </span>
+<span class="text-[9px] text-primary font-medium leading-none">SAFE / NOMINAL</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Parameter 5: Ice Ramming Cycles Projected -->
+<div class="border border-outline-variant bg-surface-container-lowest">
+<div class="h-6 bg-surface-container-low px-2 flex justify-between items-center text-label-caps font-label-caps text-secondary">
+<span>PROJECTED RAMMING CYCLES</span>
+<span class="font-data-mono-sm text-data-mono-sm text-secondary">STRUCTURAL FATIGUE</span>
+</div>
+<div class="grid grid-cols-2 divide-x divide-outline-variant p-2 font-data-mono-md text-data-mono-md">
+<div class="flex flex-col">
+<span class="text-[10px] font-label-caps text-secondary uppercase">TRACK A</span>
+<span class="font-semibold text-error">140+ EVENTS</span>
+<span class="text-[9px] text-secondary font-body-sm leading-tight">High hull stress</span>
+</div>
+<div class="flex flex-col pl-2">
+<span class="text-[10px] font-label-caps text-primary uppercase font-semibold">TRACK B (AI)</span>
+<span class="font-semibold text-primary">0 EVENTS</span>
+<span class="text-[9px] text-primary font-body-sm leading-tight">Continuous lead transit</span>
+</div>
+</div>
+</div>
+<!-- Ice Navigators' Consensus Log / Notes Card -->
+<div class="border border-outline-variant bg-surface-container-low p-2.5 mt-1">
+<div class="flex items-center justify-between mb-1">
+<span class="text-label-caps font-label-caps uppercase text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-secondary" data-icon="description">description</span>
+                ICE NAVIGATOR CONSENSUS LOG
+              </span>
+<span class="font-data-mono-sm text-[10px] text-secondary">SENIOR PILOT // CONRAD</span>
+</div>
+<p class="text-[11px] leading-relaxed text-on-surface italic bg-surface-container-lowest p-2 border border-outline-variant">
+              "Recommending Track B via Prydz Channel Polynya. Sentinel-1 SAR pass confirms fracture lead open at 67°30'S. Avoids northern lobe of iceberg B-31G drift uncertainty corridor. Minimal pressure ridge encounter expected."
+            </p>
+</div>
+</div>
+</div>
+<!-- Action Operational Triggers (Bottom of Right Panel) -->
+<div class="p-pad-compact border-t border-outline-variant bg-surface-container-lowest flex flex-col gap-2">
+<!-- Primary Action -->
+<button class="w-full h-9 bg-primary-container text-on-primary hover:bg-primary transition-colors duration-150 flex items-center justify-center gap-2 font-headline-sm text-body-sm font-semibold rounded-none">
+<span class="material-symbols-outlined text-[16px]" data-icon="navigation">navigation</span>
+          Engage AI Route to ECDIS
+        </button>
+<div class="grid grid-cols-2 gap-2">
+<!-- Secondary Utility 1 -->
+<button class="h-8 bg-surface-container-lowest text-on-surface border border-outline-variant hover:bg-surface-container hover:border-secondary transition-colors duration-150 flex items-center justify-center gap-1.5 font-headline-sm text-body-sm rounded-none">
+<span class="material-symbols-outlined text-secondary text-[15px]" data-icon="file_download">file_download</span>
+            Export (NMEA)
+          </button>
+<!-- Secondary Utility 2 -->
+<button class="h-8 bg-surface-container-lowest text-on-surface border border-outline-variant hover:bg-surface-container hover:border-secondary transition-colors duration-150 flex items-center justify-center gap-1.5 font-headline-sm text-body-sm rounded-none">
+<span class="material-symbols-outlined text-secondary text-[15px]" data-icon="history_toggle_subpath">image_search</span>
+            Simulate 48h Drift
+          </button>
+</div>
+</div>
+</section>
+</div>
+<!-- ================================================================= -->
+<!-- BOTTOM TELEMETRY STRIP (Bridge Conning Status Readouts)            -->
+<!-- ================================================================= -->
+<footer class="h-7 border-t border-outline-variant bg-surface-container-lowest px-pad-deck flex items-center justify-between text-secondary font-data-mono-sm text-data-mono-sm z-50 flex-shrink-0">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-on-surface font-medium">ECDIS SYNC: ACTIVE</span>
+</div>
+<div class="h-3 w-[1px] bg-outline-variant"></div>
+<div>HEADING: <span class="text-on-surface font-semibold">142.4°T</span></div>
+<div class="h-3 w-[1px] bg-outline-variant"></div>
+<div>SOG: <span class="text-on-surface font-semibold">12.8 KTS</span></div>
+<div class="h-3 w-[1px] bg-outline-variant"></div>
+<div>RUDDER: <span class="text-on-surface font-semibold">0.0° MID</span></div>
+<div class="h-3 w-[1px] bg-outline-variant"></div>
+<div>DEPTH UNDER KEEL: <span class="text-on-surface font-semibold">384 M</span></div>
+</div>
+<div class="flex items-center gap-4">
+<div>POLAR CODE RIO: <span class="text-primary font-semibold">+6.2 [CATEGORY A]</span></div>
+<div class="h-3 w-[1px] bg-outline-variant"></div>
+<div>ICE RADAR: <span class="text-on-surface font-medium">9.4 GHz X-BAND ACTIVE</span></div>
+<div class="h-3 w-[1px] bg-outline-variant"></div>
+<div class="text-on-surface font-medium">UTC 2025-02-28 06:42:19Z</div>
+</div>
+</footer>
+</body></html>

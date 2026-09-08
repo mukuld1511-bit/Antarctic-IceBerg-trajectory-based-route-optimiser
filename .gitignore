@@ -22,6 +22,9 @@ venv/
 ENV/
 *.pt
 *.pth
+!ml/checkpoints/*.pth
+!ml/checkpoints/*.joblib
+*.zip
 .pytest_cache/
 .coverage
 htmlcov/

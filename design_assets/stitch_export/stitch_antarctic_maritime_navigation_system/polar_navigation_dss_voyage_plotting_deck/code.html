@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>POLARIS DSS // RV SAMUDRA RATNA [PC-4] - Voyage Plotting & Mission Parameters Deck</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary": "#006275",
+            "tertiary-fixed-dim": "#feb957",
+            "on-tertiary": "#ffffff",
+            "surface": "#f5fafd",
+            "on-tertiary-fixed-variant": "#633f00",
+            "error": "#ba1a1a",
+            "on-secondary": "#ffffff",
+            "surface-container-low": "#eff4f7",
+            "surface-container-lowest": "#ffffff",
+            "on-background": "#171c1f",
+            "secondary-container": "#cce6f7",
+            "on-primary-container": "#ecfaff",
+            "on-primary": "#ffffff",
+            "surface-container": "#eaeff2",
+            "on-primary-fixed-variant": "#004e5e",
+            "tertiary-fixed": "#ffddb5",
+            "surface-bright": "#f5fafd",
+            "surface-container-high": "#e4e9ec",
+            "outline-variant": "#bec8cc",
+            "surface-tint": "#00687c",
+            "surface-dim": "#d6dbde",
+            "on-tertiary-container": "#fff6f0",
+            "inverse-surface": "#2c3134",
+            "tertiary-container": "#9d6600",
+            "on-tertiary-fixed": "#2a1800",
+            "on-error-container": "#93000a",
+            "primary-container": "#0e7c93",
+            "on-error": "#ffffff",
+            "inverse-on-surface": "#ecf1f4",
+            "on-secondary-container": "#4f6876",
+            "on-secondary-fixed": "#021e2a",
+            "surface-container-highest": "#dee3e6",
+            "secondary": "#49626f",
+            "on-surface-variant": "#3e484c",
+            "primary-fixed-dim": "#7cd3ec",
+            "secondary-fixed-dim": "#b0cada",
+            "on-primary-fixed": "#001f27",
+            "outline": "#6e797c",
+            "tertiary": "#7c5000",
+            "on-surface": "#171c1f",
+            "inverse-primary": "#7cd3ec",
+            "surface-variant": "#dee3e6",
+            "background": "#f5fafd",
+            "error-container": "#ffdad6",
+            "secondary-fixed": "#cce6f7",
+            "primary-fixed": "#b0ecff",
+            "on-secondary-fixed-variant": "#314a57"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "pad-compact": "0.75rem",
+            "grid-hairline": "1px",
+            "pad-deck": "1.5rem",
+            "margin-screen": "1rem",
+            "pad-tight": "0.5rem",
+            "gutter": "1rem",
+            "panel-gap": "0.5rem",
+            "pad-base": "1rem",
+            "pad-micro": "0.25rem"
+          },
+          "fontFamily": {
+            "label-caps": ["Inter"],
+            "display-lg": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-sm": ["Inter"],
+            "data-mono-md": ["JetBrains Mono"],
+            "data-mono-sm": ["JetBrains Mono"],
+            "headline-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "data-mono-lg": ["JetBrains Mono"]
+          },
+          "fontSize": {
+            "label-caps": ["10px", { "lineHeight": "12px", "fontWeight": "600" }],
+            "display-lg": ["32px", { "lineHeight": "38px", "fontWeight": "600" }],
+            "body-lg": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "headline-sm": ["16px", { "lineHeight": "22px", "fontWeight": "600" }],
+            "data-mono-md": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "data-mono-sm": ["11px", { "lineHeight": "14px", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-md": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "data-mono-lg": ["18px", { "lineHeight": "24px", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 16px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .chart-graticule {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(190, 200, 204, 0.25) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(190, 200, 204, 0.25) 1px, transparent 1px);
+    }
+    .admiralty-paper {
+      background-color: #EEF3F6;
+    }
+    /* Hairline dotted divider */
+    .dotted-hairline {
+      border-bottom: 1px dotted #bec8cc;
+    }
+  </style>
+</head>
+<body class="admiralty-paper text-on-surface font-body-sm antialiased select-none min-h-screen flex flex-col overflow-x-hidden">
+<!-- TOP APP BAR (from Shared Components JSON: TopNavBar) -->
+<header class="flex justify-between items-center w-full px-pad-deck h-12 border-b border-outline-variant bg-surface-container-lowest dark:bg-surface-container-low shrink-0 z-30">
+<div class="flex items-center space-x-6">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary" data-icon="farsight_digital">farsight_digital</span>
+<span class="text-headline-sm font-headline-sm font-semibold tracking-tight text-on-surface dark:text-inverse-on-surface">
+          POLARIS DSS // RV SAMUDRA RATNA [PC-4]
+        </span>
+</div>
+<!-- Nav Links -->
+<nav class="hidden md:flex items-center space-x-5">
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-on-surface text-body-sm font-body-sm pb-1 transition-colors duration-150" href="#">Overview</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-on-surface text-body-sm font-body-sm pb-1 transition-colors duration-150" href="#">Route Comparison</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-on-surface text-body-sm font-body-sm pb-1 transition-colors duration-150" href="#">Iceberg Inspector</a>
+<!-- Active Nav: Voyage Plotting -->
+<a class="border-b-2 border-primary text-primary dark:text-inverse-primary font-semibold text-body-sm font-body-sm pb-1" href="#">Voyage Plotting</a>
+</nav>
+</div>
+<!-- Trailing Actions & Telemetry -->
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-1.5 px-2 py-0.5 border border-outline-variant bg-surface-container text-on-surface font-data-mono-sm text-data-mono-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+<span class="font-semibold text-primary">SAR Feed Live</span>
+</div>
+<div class="hidden sm:flex items-center space-x-1 text-data-mono-sm font-data-mono-sm text-secondary">
+<span class="material-symbols-outlined text-secondary" data-icon="sensors">sensors</span>
+<span>69°24'S 76°11'E</span>
+</div>
+<div class="flex items-center space-x-2 border-l border-outline-variant pl-4">
+<button class="p-1 hover:bg-surface-container text-secondary hover:text-primary transition-colors duration-150" title="Satellite Status">
+<span class="material-symbols-outlined" data-icon="satellite_alt">satellite_alt</span>
+</button>
+<button class="p-1 hover:bg-surface-container text-secondary hover:text-primary transition-colors duration-150" title="Sensor Telemetry">
+<span class="material-symbols-outlined" data-icon="sensors">sensors</span>
+</button>
+<div class="w-6 h-6 border border-outline-variant bg-surface-container flex items-center justify-center text-label-caps font-label-caps font-semibold text-primary" title="Bridge Watch Officer Identity Token">
+          WO
+        </div>
+</div>
+</div>
+</header>
+<!-- MAIN OPERATIONAL STAGE -->
+<main class="flex-1 flex flex-col lg:flex-row w-full overflow-hidden">
+<!-- ========================================== -->
+<!-- LEFT: NAUTICAL CHART PLOTTING VIEWPORT (60%) -->
+<!-- ========================================== -->
+<section class="lg:w-[60%] flex flex-col border-r border-outline-variant bg-surface-container-lowest relative overflow-hidden min-h-[640px]">
+<!-- Chart Meta Bar -->
+<div class="h-8 bg-surface-container-low border-b border-outline-variant px-pad-base flex items-center justify-between z-10 shrink-0">
+<div class="flex items-center space-x-3">
+<span class="text-label-caps font-label-caps tracking-widest text-secondary uppercase">CHART PLOT: SOUTHERN OCEAN SECTOR III (INDIAN ANTARCTIC)</span>
+<span class="text-data-mono-sm font-data-mono-sm text-outline">|</span>
+<span class="text-data-mono-sm font-data-mono-sm text-on-surface-variant">INT CHART 901 // WGS-84 MERCATOR</span>
+</div>
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-1.5 text-data-mono-sm font-data-mono-sm text-secondary">
+<span class="inline-block w-2.5 h-0.5 bg-sky-500"></span>
+<span>2025 SAT EDGE</span>
+</div>
+<div class="flex items-center space-x-1.5 text-data-mono-sm font-data-mono-sm text-secondary">
+<span class="inline-block w-2.5 h-0.5 border-b border-dashed border-outline"></span>
+<span>1981-2020 MEDIAN</span>
+</div>
+<span class="text-data-mono-sm font-data-mono-sm text-primary font-semibold">1:3,500,000</span>
+</div>
+</div>
+<!-- Interactive Chart Viewport Canvas Area -->
+<div class="flex-1 relative chart-graticule overflow-hidden flex items-center justify-center p-4">
+<!-- Subtle Coordinates Overlays on Edge of Chart Graticule -->
+<div class="absolute top-2 left-3 font-data-mono-sm text-data-mono-sm text-outline select-none pointer-events-none">
+          30°00'S // 010°00'E
+        </div>
+<div class="absolute top-2 right-3 font-data-mono-sm text-data-mono-sm text-outline select-none pointer-events-none">
+          30°00'S // 090°00'E
+        </div>
+<div class="absolute bottom-2 left-3 font-data-mono-sm text-data-mono-sm text-outline select-none pointer-events-none">
+          72°00'S // 010°00'E
+        </div>
+<div class="absolute bottom-2 right-3 font-data-mono-sm text-data-mono-sm text-outline select-none pointer-events-none">
+          72°00'S // 090°00'E
+        </div>
+<!-- Nautical Chart Vector Graphics Layer (Synthetic Cartography) -->
+<svg class="w-full h-full max-h-[780px]" fill="none" viewbox="0 0 800 680" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<!-- Pattern for Pack Ice Zone -->
+<pattern height="20" id="packIcePattern" patternunits="userSpaceOnUse" width="20">
+<path d="M0 20 L20 0 M5 25 L25 5 M-5 15 L15 -5" stroke="#bec8cc" stroke-opacity="0.4" stroke-width="0.75"></path>
+</pattern>
+<!-- Pattern for Fast Ice Zone -->
+<pattern height="8" id="fastIcePattern" patternunits="userSpaceOnUse" width="8">
+<circle cx="4" cy="4" fill="#006275" fill-opacity="0.25" r="1"></circle>
+</pattern>
+</defs>
+<!-- Bathymetric Isobaths Lines -->
+<path d="M 50,180 Q 250,220 500,160 T 780,210" fill="none" stroke="#d6dbde" stroke-dasharray="2 2" stroke-width="1"></path>
+<text class="font-data-mono-sm" fill="#6e797c" font-size="9" x="520" y="155">-- 4000m --</text>
+<path d="M 40,320 Q 300,360 480,290 T 770,340" fill="none" stroke="#d6dbde" stroke-dasharray="2 2" stroke-width="1"></path>
+<text class="font-data-mono-sm" fill="#6e797c" font-size="9" x="320" y="345">-- 3000m SOUTHERN BASIN --</text>
+<path d="M 30,480 Q 280,510 520,460 T 780,490" fill="none" stroke="#bec8cc" stroke-width="1.2"></path>
+<text class="font-data-mono-sm" fill="#6e797c" font-size="9" x="180" y="505">-- 1000m CONTINENTAL SLOPE --</text>
+<!-- Median Ice Edge (1981-2020) Dashed Contour -->
+<path d="M 40,410 Q 220,430 420,390 T 780,440" fill="none" stroke="#6e797c" stroke-dasharray="6 4" stroke-width="1.5"></path>
+<text class="font-data-mono-sm font-semibold" fill="#6e797c" font-size="10" x="560" y="420">1981-2020 CLIMATOLOGICAL MEDIAN ICE EDGE</text>
+<!-- Current 2025 Satellite SAR Sea Ice Edge Contour -->
+<path d="M 40,460 C 210,490 350,440 460,450 C 570,460 670,410 780,430 L 780,680 L 40,680 Z" fill="#eff4f7" fill-opacity="0.85"></path>
+<path d="M 40,460 C 210,490 350,440 460,450 C 570,460 670,410 780,430" fill="none" stroke="#006275" stroke-width="2"></path>
+<path d="M 40,460 C 210,490 350,440 460,450 C 570,460 670,410 780,430 L 780,680 L 40,680 Z" fill="url(#packIcePattern)"></path>
+<text class="font-label-caps font-semibold" fill="#006275" font-size="10" x="80" y="485">2025 SAR ICE EDGE [CONCENTRATION ≥ 4/10]</text>
+<!-- Fast Ice & Antarctic Coastline Geometry (Larsemann Hills / Prydz Bay Region) -->
+<path d="M 60,620 C 180,600 320,640 450,590 C 560,550 680,610 780,580 L 780,680 L 60,680 Z" fill="#ffffff" stroke="#3e484c" stroke-width="2"></path>
+<path d="M 60,620 C 180,600 320,640 450,590 C 560,550 680,610 780,580 L 780,680 L 60,680 Z" fill="url(#fastIcePattern)"></path>
+<!-- Prydz Bay Coastal Polynya (Open Water lead highlighted) -->
+<path d="M 520,580 C 550,560 610,560 640,585 C 610,595 560,598 520,580 Z" fill="#cce6f7" stroke="#006275" stroke-width="1.5"></path>
+<text class="font-label-caps font-semibold" fill="#004e5e" font-size="9" x="535" y="575">PRYDZ BAY COASTAL LEAD (OPEN)</text>
+<!-- Magnetic Deviation Curves (Isogonics) -->
+<path d="M 120,40 Q 170,300 240,660" fill="none" stroke="#ba1a1a" stroke-dasharray="4 3" stroke-opacity="0.5" stroke-width="0.75"></path>
+<text class="font-data-mono-sm" fill="#ba1a1a" font-size="9" opacity="0.8" x="175" y="280">24°W VAR</text>
+<path d="M 480,40 Q 520,320 580,660" fill="none" stroke="#ba1a1a" stroke-dasharray="4 3" stroke-opacity="0.5" stroke-width="0.75"></path>
+<text class="font-data-mono-sm" fill="#ba1a1a" font-size="9" opacity="0.8" x="515" y="260">38°W VAR</text>
+<!-- VOYAGE TRACK PLOTTED (Vector Corridor) -->
+<!-- Planned Corridor Envelope -->
+<path d="M 175,75 L 340,240 L 470,370 L 550,470 L 595,590" fill="none" stroke="#7cd3ec" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.35" stroke-width="14"></path>
+<!-- Main Track Line -->
+<polyline fill="none" points="180,80 340,240 470,370 550,470 590,585" stroke="#006275" stroke-dasharray="none" stroke-width="2.5"></polyline>
+<!-- Alternative Branch to Maitri Station (Schirmacher Oasis) -->
+<polyline fill="none" points="470,370 310,480 260,615" stroke="#49626f" stroke-dasharray="4 3" stroke-width="1.5"></polyline>
+<text class="font-data-mono-sm" fill="#49626f" font-size="9" x="210" y="540">SEC. BRANCH: MAITRI OPTION (-142 NM)</text>
+<!-- Waypoints & Markers -->
+<!-- WP00: Cape Town -->
+<circle cx="180" cy="80" fill="#006275" r="4" stroke="#ffffff" stroke-width="1.5"></circle>
+<circle cx="180" cy="80" r="10" stroke="#006275" stroke-dasharray="2 2" stroke-width="1"></circle>
+<rect fill="#ffffff" height="26" stroke="#bec8cc" stroke-width="1" width="130" x="195" y="66"></rect>
+<text class="font-label-caps font-semibold" fill="#171c1f" font-size="10" x="202" y="77">DEPARTURE: CAPE TOWN</text>
+<text class="font-data-mono-sm" fill="#49626f" font-size="8.5" x="202" y="88">33°54'S 18°26'E // T-0</text>
+<!-- WP01: Oceanic Turn (Roaring Forties Corridor) -->
+<circle cx="340" cy="240" fill="#ffffff" r="3.5" stroke="#006275" stroke-width="2"></circle>
+<rect fill="#ffffff" height="22" stroke="#bec8cc" stroke-width="1" width="105" x="352" y="230"></rect>
+<text class="font-label-caps font-semibold" fill="#171c1f" font-size="9.5" x="358" y="241">WP-01 ROARING 40s</text>
+<text class="font-data-mono-sm" fill="#49626f" font-size="8" x="358" y="249">44°10'S 38°40'E</text>
+<!-- WP02: Sub-Antarctic Divergence -->
+<circle cx="470" cy="370" fill="#ffffff" r="3.5" stroke="#006275" stroke-width="2"></circle>
+<rect fill="#ffffff" height="22" stroke="#bec8cc" stroke-width="1" width="112" x="482" y="358"></rect>
+<text class="font-label-caps font-semibold" fill="#171c1f" font-size="9.5" x="488" y="369">WP-02 CONVERGENCE</text>
+<text class="font-data-mono-sm" fill="#49626f" font-size="8" x="488" y="377">56°30'S 58°15'E</text>
+<!-- WP03: Ice Edge Rendezvous -->
+<circle cx="550" cy="470" fill="#feb957" r="4.5" stroke="#006275" stroke-width="2"></circle>
+<rect fill="#ffffff" height="26" stroke="#006275" stroke-width="1.5" width="138" x="562" y="456"></rect>
+<text class="font-label-caps font-semibold" fill="#7c5000" font-size="9.5" x="568" y="468">WP-03 ICE RENDEZVOUS</text>
+<text class="font-data-mono-sm" fill="#006275" font-size="8" x="568" y="478">63°15'S 68°50'E // RIO: +3.4</text>
+<!-- WP04: Fast-Ice Mooring (Bharati Station) -->
+<circle cx="590" cy="585" fill="#ba1a1a" r="5" stroke="#ffffff" stroke-width="2"></circle>
+<rect fill="#ffffff" height="28" stroke="#ba1a1a" stroke-width="1.5" width="154" x="605" y="572"></rect>
+<text class="font-label-caps font-semibold" fill="#ba1a1a" font-size="10" x="612" y="584">MOORING: BHARATI STN</text>
+<text class="font-data-mono-sm" fill="#171c1f" font-size="8.5" x="612" y="595">PRYDZ BAY // 69°24'S 76°11'E</text>
+<!-- Vessel Current Symbolic Ghost Marker -->
+<polygon fill="#006275" points="180,80 176,92 184,92"></polygon>
+</svg>
+<!-- Prominent British Admiralty-Style Compass Rose (Floating Instrument) -->
+<div class="absolute top-8 right-8 w-36 h-36 border border-outline-variant bg-surface-container-lowest shadow-sm flex items-center justify-center p-2 pointer-events-none">
+<div class="relative w-full h-full flex items-center justify-center">
+<!-- Compass Ring Ticks -->
+<div class="absolute inset-0 rounded-full border border-outline-variant flex items-center justify-center">
+<span class="absolute top-0 text-[9px] font-data-mono-sm font-semibold text-primary">000°</span>
+<span class="absolute right-1 text-[9px] font-data-mono-sm text-secondary">090°</span>
+<span class="absolute bottom-0 text-[9px] font-data-mono-sm text-secondary">180°</span>
+<span class="absolute left-1 text-[9px] font-data-mono-sm text-secondary">270°</span>
+</div>
+<!-- Star Crosshairs -->
+<div class="w-20 h-20 border border-outline-variant rotate-45"></div>
+<div class="absolute w-full h-[1px] bg-outline-variant"></div>
+<div class="absolute h-full w-[1px] bg-outline-variant"></div>
+<!-- Brass-Needle / North Arrow -->
+<div class="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[38px] border-b-primary -mt-6"></div>
+<div class="absolute w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[38px] border-t-secondary -mb-6"></div>
+<div class="absolute w-2 h-2 rounded-full bg-surface-container-lowest border border-primary"></div>
+<span class="absolute -bottom-1 text-[8px] font-label-caps tracking-widest text-on-surface-variant font-semibold bg-surface-container-lowest px-1">
+              MAG DEV 31.4°W
+            </span>
+</div>
+</div>
+<!-- Chart Quick Inspection Badge (Bottom Left) -->
+<div class="absolute bottom-4 left-4 bg-surface-container-lowest border border-outline-variant p-2 flex flex-col space-y-1 shadow-sm max-w-[260px]">
+<div class="flex items-center justify-between border-b border-outline-variant pb-1">
+<span class="text-label-caps font-label-caps text-secondary font-semibold">TRACK CORRIDOR SAFETY</span>
+<span class="px-1 py-0.2 border border-emerald-300 text-emerald-700 bg-emerald-50 text-[9px] font-data-mono-sm font-semibold">PASS VALID</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant text-[11px] leading-tight pt-0.5">
+            Clear of charted shallow pinnacles (>180m clearance along fast-ice entry approach). SAR radar swath updated 2.1h ago.
+          </p>
+</div>
+<!-- Chart Layer Toolset (Top Left Mini Dock) -->
+<div class="absolute top-12 left-4 bg-surface-container-lowest border border-outline-variant flex flex-col divide-y divide-outline-variant shadow-sm">
+<button class="w-7 h-7 flex items-center justify-center hover:bg-surface-container text-secondary hover:text-primary" title="Zoom In">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center hover:bg-surface-container text-secondary hover:text-primary" title="Zoom Out">
+<span class="material-symbols-outlined" data-icon="remove">remove</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center hover:bg-surface-container text-primary bg-surface-container-low" title="Recenter Track">
+<span class="material-symbols-outlined" data-icon="my_location">my_location</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center hover:bg-surface-container text-secondary hover:text-primary" title="Toggle Depth Contours">
+<span class="material-symbols-outlined" data-icon="layers">layers</span>
+</button>
+</div>
+</div>
+<!-- Chart Scale & Hydrographic Footer Rule -->
+<div class="h-6 bg-surface-container-low border-t border-outline-variant px-pad-base flex items-center justify-between text-data-mono-sm font-data-mono-sm text-secondary shrink-0">
+<div>LAT EXTENT: 33°54'00"S - 69°24'00"S // LONG EXTENT: 018°26'00"E - 076°11'00"E</div>
+<div class="flex items-center space-x-2">
+<span>NAUTICAL SCALE:</span>
+<div class="w-24 h-1.5 bg-outline flex">
+<div class="w-1/2 h-full bg-primary"></div>
+<div class="w-1/2 h-full bg-surface-container-lowest border border-outline"></div>
+</div>
+<span>200 NM</span>
+</div>
+</div>
+</section>
+<!-- ========================================== -->
+<!-- RIGHT: VOYAGE PARAMETER & MISSION DECK (40%) -->
+<!-- ========================================== -->
+<section class="lg:w-[40%] flex flex-col bg-surface-container-lowest overflow-y-auto">
+<!-- Panel Header Bar -->
+<div class="p-pad-base border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<div>
+<span class="text-label-caps font-label-caps uppercase tracking-widest text-secondary block">EXPEDITION OPERATIONAL DECK</span>
+<h1 class="text-headline-sm font-headline-sm text-on-surface font-bold">
+            VOYAGE SPECIFICATION & POLAR CODE CONFORMANCE
+          </h1>
+</div>
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-fixed text-label-caps font-label-caps font-bold border border-outline-variant">
+          POLARIS READY
+        </span>
+</div>
+<div class="p-pad-deck flex-1 space-y-5">
+<!-- SECTION 1: Vessel Classification & Hull Capability -->
+<div class="border border-outline-variant bg-surface-container-lowest">
+<div class="h-7 bg-surface-container-high border-b border-outline-variant px-pad-compact flex items-center justify-between">
+<span class="text-label-caps font-label-caps font-semibold text-secondary uppercase tracking-wider">
+              1. VESSEL CLASSIFICATION & HULL CAPABILITY
+            </span>
+<span class="text-data-mono-sm font-data-mono-sm text-primary font-semibold">IMO: 9874412</span>
+</div>
+<div class="p-pad-compact space-y-2.5">
+<!-- Row 1: Name and Class -->
+<div class="grid grid-cols-2 gap-2 dotted-hairline pb-2">
+<div>
+<span class="text-label-caps font-label-caps text-secondary block">VESSEL NAME & OPERATOR</span>
+<span class="text-body-md font-body-md font-semibold text-on-surface">RV Samudra Ratna</span>
+<span class="text-data-mono-sm font-data-mono-sm text-secondary block">Govt of India / NCPOR</span>
+</div>
+<div>
+<span class="text-label-caps font-label-caps text-secondary block">POLAR CLASS CATEGORY</span>
+<div class="inline-flex items-center space-x-1.5 px-2 py-0.5 bg-secondary-container text-on-secondary-fixed font-semibold text-body-sm font-body-sm border border-outline-variant mt-0.5">
+<span class="material-symbols-outlined text-primary text-[14px]" data-icon="shield">shield</span>
+<span>Polar Class 4 (PC-4)</span>
+</div>
+<span class="text-[10px] text-on-surface-variant block mt-0.5">Year-round ops in thick first-year ice</span>
+</div>
+</div>
+<!-- Row 2: Displacement, Icebreaking & MCR -->
+<div class="grid grid-cols-3 gap-2 pt-0.5">
+<div class="border border-outline-variant p-2 bg-surface-container-low">
+<span class="text-label-caps font-label-caps text-secondary block">DISPLACEMENT</span>
+<span class="text-data-mono-md font-data-mono-md font-bold text-on-surface">12,400</span>
+<span class="text-data-mono-sm font-data-mono-sm text-secondary"> tonnes</span>
+</div>
+<div class="border border-outline-variant p-2 bg-surface-container-low">
+<span class="text-label-caps font-label-caps text-secondary block">ICEBREAKING RATING</span>
+<span class="text-data-mono-md font-data-mono-md font-bold text-primary">1.5m</span>
+<span class="text-data-mono-sm font-data-mono-sm text-secondary"> @ 3 kts</span>
+</div>
+<div class="border border-outline-variant p-2 bg-surface-container-low">
+<span class="text-label-caps font-label-caps text-secondary block">PROPULSION MCR</span>
+<span class="text-data-mono-md font-data-mono-md font-bold text-on-surface">14,800</span>
+<span class="text-data-mono-sm font-data-mono-sm text-secondary"> kW (Twin Azipod)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION 2: Voyage Routing Parameters -->
+<div class="border border-outline-variant bg-surface-container-lowest">
+<div class="h-7 bg-surface-container-high border-b border-outline-variant px-pad-compact flex items-center justify-between">
+<span class="text-label-caps font-label-caps font-semibold text-secondary uppercase tracking-wider">
+              2. VOYAGE ROUTING PARAMETERS & POLARIS GOVERNANCE
+            </span>
+<span class="text-label-caps font-label-caps text-secondary">LEG 01 / 44th ISEA</span>
+</div>
+<div class="p-pad-compact space-y-3">
+<!-- Departure & Destination -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+<div class="border border-outline-variant p-2 bg-surface-container-low">
+<div class="flex items-center justify-between">
+<span class="text-label-caps font-label-caps text-secondary">PORT OF DEPARTURE</span>
+<span class="material-symbols-outlined text-secondary" data-icon="anchor">anchor</span>
+</div>
+<div class="text-body-md font-body-md font-semibold text-on-surface mt-0.5">Cape Town, South Africa</div>
+<div class="text-data-mono-sm font-data-mono-sm text-secondary">33°54'S 18°26'E</div>
+</div>
+<div class="border border-outline-variant p-2 bg-secondary-container/30">
+<div class="flex items-center justify-between">
+<span class="text-label-caps font-label-caps text-primary font-semibold">DESTINATION ICE MOORING</span>
+<span class="material-symbols-outlined text-primary" data-icon="ac_unit">ac_unit</span>
+</div>
+<div class="text-body-md font-body-md font-semibold text-on-surface mt-0.5">Bharati Station, Prydz Bay</div>
+<div class="text-data-mono-sm font-data-mono-sm text-primary font-semibold">69°24'S 76°11'E</div>
+</div>
+</div>
+<!-- Parameters Grid (Inputs / Selectors) -->
+<div class="space-y-2 pt-1">
+<!-- Departure Chronometer -->
+<div class="flex items-center justify-between dotted-hairline pb-2">
+<div>
+<span class="text-body-sm font-body-sm font-semibold text-on-surface block">Departure Chronometer</span>
+<span class="text-[10px] text-secondary">Synchronized with UTC Cape Town Port Authority</span>
+</div>
+<div class="border border-outline-variant bg-surface-container-lowest px-2 py-1 font-data-mono-sm text-data-mono-sm font-semibold text-on-surface">
+                  18-NOV-2025 // 06:00 UTC
+                </div>
+</div>
+<!-- Risk Tolerance Mode -->
+<div class="flex items-center justify-between dotted-hairline pb-2">
+<div>
+<span class="text-body-sm font-body-sm font-semibold text-on-surface block">POLARIS Risk Tolerance Mode</span>
+<span class="text-[10px] text-secondary">Floor RIO criterion per IMO MSC.1/Circ.1519</span>
+</div>
+<div class="flex items-center space-x-1">
+<span class="px-2 py-1 bg-surface-container text-primary font-semibold font-body-sm text-body-sm border border-outline-variant">
+                    Balanced Safety & Fuel
+                  </span>
+<span class="px-1.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-300 font-data-mono-sm text-data-mono-sm font-bold">
+                    RIO ≥ +2.0
+                  </span>
+</div>
+</div>
+<!-- Satellite Cadence -->
+<div class="flex items-center justify-between pt-0.5">
+<div>
+<span class="text-body-sm font-body-sm font-semibold text-on-surface block">Satellite SAR Refresh Cadence</span>
+<span class="text-[10px] text-secondary">Sentinel-1C & RADARSAT Constellation Mission</span>
+</div>
+<div class="border border-outline-variant bg-surface-container-low px-2 py-1 text-data-mono-sm font-data-mono-sm text-secondary font-semibold">
+                  6-Hour SAR Auto-Ingest
+                </div>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION 3: Calculated Mission Projections -->
+<div class="border border-outline-variant bg-surface-container-lowest">
+<div class="h-7 bg-surface-container-high border-b border-outline-variant px-pad-compact flex items-center justify-between">
+<span class="text-label-caps font-label-caps font-semibold text-secondary uppercase tracking-wider">
+              3. CALCULATED MISSION PROJECTIONS & ICE REGIME
+            </span>
+<span class="text-data-mono-sm font-data-mono-sm text-secondary">SIM ENGINE v4.22</span>
+</div>
+<div class="p-pad-compact space-y-3">
+<div class="grid grid-cols-3 gap-2">
+<!-- Total Distance -->
+<div class="border border-outline-variant p-2 bg-surface-container-low">
+<span class="text-label-caps font-label-caps text-secondary block">TOTAL DISTANCE</span>
+<div class="text-data-mono-lg font-data-mono-lg font-bold text-on-surface">2,488</div>
+<span class="text-data-mono-sm font-data-mono-sm text-secondary">Nautical Miles</span>
+</div>
+<!-- Estimated Fuel -->
+<div class="border border-outline-variant p-2 bg-surface-container-low">
+<span class="text-label-caps font-label-caps text-secondary block">EST. FUEL BURN</span>
+<div class="text-data-mono-lg font-data-mono-lg font-bold text-primary">186.2</div>
+<span class="text-data-mono-sm font-data-mono-sm text-secondary">MT Low-Sulfur MGO</span>
+</div>
+<!-- Days at Sea -->
+<div class="border border-outline-variant p-2 bg-surface-container-low">
+<span class="text-label-caps font-label-caps text-secondary block">DAYS AT SEA</span>
+<div class="text-data-mono-lg font-data-mono-lg font-bold text-on-surface">8.8</div>
+<span class="text-data-mono-sm font-data-mono-sm text-secondary">Days @ 12.2 kts avg</span>
+</div>
+</div>
+<!-- Polynyas Utilized Telemetry Chip Container -->
+<div class="border border-outline-variant p-2.5 bg-surface-container-low">
+<span class="text-label-caps font-label-caps text-secondary block mb-1">ICE PHENOMENA & POLYNYAS UTILIZED</span>
+<div class="flex flex-wrap gap-1.5">
+<div class="inline-flex items-center space-x-1.5 px-2 py-0.5 bg-white border border-outline-variant text-on-surface font-body-sm text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+<span class="font-semibold">Prydz Bay Coastal Lead</span>
+<span class="text-secondary font-data-mono-sm">(48 NM in open water)</span>
+</div>
+<div class="inline-flex items-center space-x-1.5 px-2 py-0.5 bg-white border border-outline-variant text-on-surface font-body-sm text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+<span class="font-semibold">Amery Shelf Flaw Lead</span>
+<span class="text-secondary font-data-mono-sm">(Favorable shore drift)</span>
+</div>
+</div>
+</div>
+<!-- Polar Code Compliance Confirmation -->
+<div class="flex items-center space-x-2 p-2 bg-emerald-50 border border-emerald-200 text-emerald-900">
+<span class="material-symbols-outlined text-emerald-700" data-icon="verified">verified</span>
+<div class="text-body-sm font-body-sm text-[11px] leading-tight">
+<span class="font-bold">Polar Code Category A Conformance:</span> Predicted Risk Index Outcome (RIO) remains positive throughout entire track corridor (> +2.0). Voyage plan is valid for navigation master signing.
+              </div>
+</div>
+</div>
+</div>
+<!-- ACTION DECK (Bridge Command Triggers) -->
+<div class="space-y-2 pt-1 pb-2">
+<!-- Primary Action -->
+<button class="w-full h-9 bg-primary hover:bg-[#0A5C6D] active:bg-[#004e5e] text-on-primary font-body-md font-bold text-body-md flex items-center justify-center space-x-2 transition-colors duration-150 shadow-sm">
+<span class="material-symbols-outlined text-white" data-icon="save">save</span>
+<span>Commit Voyage Plot to ECDIS</span>
+</button>
+<!-- Secondary Actions (Twin Row) -->
+<div class="grid grid-cols-2 gap-2">
+<button class="h-8 bg-surface-container-lowest hover:bg-surface-container-low border border-outline-variant text-on-surface font-body-sm font-semibold text-body-sm flex items-center justify-center space-x-1.5 transition-colors duration-150">
+<span class="material-symbols-outlined text-secondary" data-icon="print">print</span>
+<span>Print Track Sheet</span>
+</button>
+<button class="h-8 bg-surface-container-lowest hover:bg-surface-container-low border border-outline-variant text-on-surface font-body-sm font-semibold text-body-sm flex items-center justify-center space-x-1.5 transition-colors duration-150">
+<span class="material-symbols-outlined text-secondary" data-icon="forward_to_inbox">forward_to_inbox</span>
+<span>NCPOR Shore Briefing</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Station Telemetry Stamp Footer -->
+<div class="h-8 bg-surface-container border-t border-outline-variant px-pad-deck flex items-center justify-between text-data-mono-sm font-data-mono-sm text-secondary shrink-0">
+<div>CONNING MATRIX 1280 // DISPATCH CODE: IND-44-ANT-01</div>
+<div>STATION: CONNING-BRIDGE-01</div>
+</div>
+</section>
+</main>
+<!-- ========================================== -->
+<!-- BOTTOM BRIDGE CONNING STRIP (Readiness Checks) -->
+<!-- ========================================== -->
+<footer class="h-9 bg-surface-container-lowest border-t border-outline-variant px-pad-deck flex items-center justify-between text-data-mono-sm font-data-mono-sm shrink-0 z-20">
+<div class="flex items-center space-x-6">
+<div class="flex items-center space-x-2 text-on-surface font-semibold">
+<span class="material-symbols-outlined text-primary text-[14px]" data-icon="fact_check">fact_check</span>
+<span class="text-label-caps font-label-caps uppercase tracking-wider text-secondary">BRIDGE READINESS:</span>
+</div>
+<!-- Readiness Tickers -->
+<div class="flex items-center space-x-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+<span class="text-secondary">ECDIS #1 / #2 SYNC:</span>
+<span class="text-on-surface font-semibold">OPERATIONAL</span>
+</div>
+<div class="hidden sm:flex items-center space-x-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+<span class="text-secondary">INMARSAT-C DUAL POLAR:</span>
+<span class="text-on-surface font-semibold">LOCKED</span>
+</div>
+<div class="hidden md:flex items-center space-x-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+<span class="text-secondary">SONAR TRANSDUCER DEPLOYED:</span>
+<span class="text-on-surface font-semibold">DEPTH 4,120m</span>
+</div>
+<div class="hidden lg:flex items-center space-x-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+<span class="text-secondary">POLARIS REGIME CALCULATOR:</span>
+<span class="text-emerald-700 font-semibold">ACTIVE</span>
+</div>
+</div>
+<!-- Right Side Clock & Watch State -->
+<div class="flex items-center space-x-4 text-secondary">
+<div>WATCH: <span class="text-on-surface font-semibold">0400-0800 MORNING WATCH</span></div>
+<div class="text-primary font-bold">18-NOV-2025 05:42:19 UTC</div>
+</div>
+</footer>
+</body></html>
