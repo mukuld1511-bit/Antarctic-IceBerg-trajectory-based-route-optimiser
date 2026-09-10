@@ -7,6 +7,7 @@
 [![Python](https://img.shields.io/badge/Python-3.11+-3776ab?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.1+-ee4c2c?logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![n8n](https://img.shields.io/badge/n8n-Automated%20Pipeline-EA4B71?logo=n8n&logoColor=white)](https://n8n.io/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 An operational, AI-enabled maritime decision support platform built for the **Ministry of Earth Sciences (MoES)** and **National Centre for Polar and Ocean Research (NCPOR)** to ensure safe, fuel-optimized navigation for Indian Antarctic Expeditions servicing the **Bharati** and **Maitri** polar research stations.
@@ -21,8 +22,15 @@ graph TD
         NSIDC["NSIDC / NOAA AMSR2 (Sea-Ice Concentration)"]
         ERA5["ECMWF ERA5 (Surface Winds & 2m Temp)"]
         NIC["US NIC / BYU (Tracked Iceberg Fleet)"]
+        METEO["Open-Meteo Marine & Polar Wind API"]
         GEBCO["GEBCO (Bathymetry & Continental Shelf)"]
         AIS["AISStream.io (Live Polar Vessel Telemetry)"]
+    end
+
+    subgraph n8n Automated Ingestion Pipeline
+        N8N["n8n Workflow Engine (iceberg_collection_workflow.json)"]
+        N8N_Physics["Embedded Bigg et al. Drag & Coriolis Estimator"]
+        N8N_Alert["NAVAREA VII/X Telegram Emergency Dispatch"]
     end
 
     subgraph AI & Physical Modeling Core
@@ -38,12 +46,19 @@ graph TD
         Timeline["7-Day Epistemic Uncertainty Forecast Scrubber"]
         Telemetry["Real-time Fuel Delta & Risk Comparison Rail"]
         VoyageBrief["Official IMO Polar Code Voyage Brief Generator"]
+        SyncBtn["1-Click Live Satellite & Weather Sync Button"]
     end
+
+    NIC --> N8N
+    METEO --> N8N
+    N8N --> N8N_Physics
+    N8N_Physics -->|POST /api/iceberg/sync| BiggODE
+    N8N_Physics -->|Critical Hazard| N8N_Alert
+    SyncBtn -->|Webhook / REST| N8N
 
     NSIDC --> ConvLSTM
     ERA5 --> ConvLSTM
     ERA5 --> BiggODE
-    NIC --> BiggODE
     GEBCO --> PolarAStar
     AIS --> ChartDeck
 
@@ -77,6 +92,12 @@ graph TD
 ### 3. AI Polar Route Optimization
 - **Spherical Polar A\***: Graph traversal accounting for spherical convergence near polar latitudes.
 - **Lindqvist Ice Resistance**: Continuous thrust and fuel consumption evaluation mapping compressive pack ice thickness ($h_i$) and concentration into operational fuel savings (typically **3.5% to 19.4% fuel reduction** over naive great-circle geodesic).
+
+### 4. Automated Satellite & Met Ingestion Pipeline (n8n Engine)
+- **Enterprise Automation**: Production workflow defined in [`n8n/iceberg_collection_workflow.json`](n8n/iceberg_collection_workflow.json) orchestrating real-time data flow.
+- **Dual Live Weather Streams**: Concurrently ingests Open-Meteo marine wave spectra (significant wave height, swell, direction) and polar wind fields (10m gusts, air temperature).
+- **Embedded Physics & Station Proximity**: Computes Bigg et al. aerodynamic/hydrodynamic drag, Coriolis parameters ($f = 2\Omega\sin\phi$), and geodesic distance to Indian polar research stations (**Maitri** and **Bharati**).
+- **Atomic DSS Synchronization & Emergency Dispatch**: Pushes calibrated telemetry into `POST /api/iceberg/sync` and automatically formats NAVAREA VII/X maritime emergency advisories for fleet Telegram channels during critical sea states.
 
 ---
 
@@ -138,6 +159,24 @@ Interactive API documentation available at **[http://localhost:8000/docs](http:/
 
 ---
 
+### Option 3: Automated Ingestion Pipeline (n8n & Data Sync)
+Runs the enterprise workflow pipeline to ingest real-time Open-Meteo marine wave spectra, 10m polar winds, and US NIC iceberg tracking:
+```bash
+# A. Launch n8n graphical workflow designer
+npm run n8n
+# Open http://localhost:5678 -> Workflows -> Import -> n8n/iceberg_collection_workflow.json
+
+# B. Or trigger an instant CLI synchronization into DSS:
+npm run sync:icebergs
+
+# C. Or use the interactive PowerShell / Batch orchestrator:
+.\start_all.ps1
+```
+> [!TIP]
+> You can also trigger live ingestion at any time directly from the Bridge UI with the **[ 🔄 Sync Live Satellites & Waves ]** button in the Route Planner panel. See the complete [n8n Setup Guide](docs/N8N_SETUP_GUIDE.md) for full architecture and webhook details.
+
+---
+
 ## 📡 Key API Endpoints
 
 | Method | Endpoint | Description |
@@ -145,6 +184,7 @@ Interactive API documentation available at **[http://localhost:8000/docs](http:/
 | `GET` | `/api/sic/forecast` | Returns gridded SIC predictions `[time, lat, lon]` with confidence bounds |
 | `GET` | `/api/iceberg/track?iceberg_id=A-23a&lead_hours=72` | Returns 72-hour Bigg et al. ODE trajectory, ML residuals, and uncertainty cones |
 | `POST` | `/api/route/optimize` | Computes AI Polar A* route vs Naive Geodesic with Lindqvist fuel metrics |
+| `POST` | `/api/iceberg/sync` | Ingests atomic iceberg telemetry & risk metrics pushed from the n8n pipeline |
 | `GET` | `/api/dashboard/summary` | Combined payload for single-roundtrip bridge console hydration |
 | `WS` | `/ws/ais` | Live WebSocket streaming real-time Antarctic vessel telemetry |
 
@@ -169,10 +209,14 @@ Interactive API documentation available at **[http://localhost:8000/docs](http:/
 │   ├── components/          # MapView, HeatmapLayer, IcebergTrackLayer, RouteLayer, Timeline, Panels
 │   ├── App.tsx              # Root bridge deck application
 │   └── index.css            # Custom Antarctic dark-mode theme & tokens
+├── n8n/                     # Automated workflow pipelines (iceberg_collection_workflow.json)
 ├── ml/                      # PyTorch training pipelines (ConvLSTM, Residual GRU, Risk Scorer)
-├── docs/                    # Architecture, Data Sources, and Design specifications
+├── docs/                    # Architecture, N8N_SETUP_GUIDE.md, Data Sources, and Specs
 ├── public/                  # Static assets and icons
-├── server.ts                # Integrated fullstack server (Express + Vite + AIS WS)
+├── scripts/                 # Ingestion & synchronization utility scripts (sync_icebergs.js)
+├── server.ts                # Integrated fullstack server (Express + Vite + AIS WS + n8n sync)
+├── start_all.bat            # Windows 1-click multi-service launcher
+├── start_all.ps1            # Interactive PowerShell service orchestrator
 └── package.json             # Node dependencies and scripts
 ```
 
