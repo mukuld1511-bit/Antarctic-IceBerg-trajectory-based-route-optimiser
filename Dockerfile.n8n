@@ -1,0 +1,21 @@
+# n8n Workflow Automation Engine for Antarctic DSS
+# Uses official n8n Docker image with workflow auto-import
+
+FROM n8nio/n8n:latest
+
+# Set working directory for n8n data
+WORKDIR /home/node
+
+# Copy the Antarctic DSS workflow for auto-import
+COPY n8n/iceberg_collection_workflow.json /home/node/.n8n/workflows/iceberg_collection_workflow.json
+
+# Expose n8n default port
+EXPOSE 5678
+
+# n8n will auto-import workflows from the data directory on first boot
+ENV N8N_PORT=5678
+ENV GENERIC_TIMEZONE=UTC
+ENV N8N_DIAGNOSTICS_ENABLED=false
+
+# Start n8n
+CMD ["n8n", "start"]

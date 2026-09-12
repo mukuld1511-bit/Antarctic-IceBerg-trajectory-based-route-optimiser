@@ -1304,6 +1304,27 @@ async function startServer() {
 
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`Antarctic DSS server running at http://0.0.0.0:${PORT}`);
+
+    // --- Keep-Alive Ping (Prevents Render Free Tier Sleep) ---
+    // Render spins down free services after 15 min of no inbound requests.
+    // This self-ping every 14 min keeps the service warm.
+    if (process.env.NODE_ENV === "production") {
+      const KEEP_ALIVE_INTERVAL_MS = 14 * 60 * 1000; // 14 minutes
+      const selfUrl = process.env.RENDER_EXTERNAL_URL || `http://0.0.0.0:${PORT}`;
+
+      setInterval(async () => {
+        try {
+          const res = await fetch(`${selfUrl}/api/health`);
+          if (res.ok) {
+            console.log(`[Keep-Alive] Pinged ${selfUrl}/api/health — OK (${new Date().toISOString()})`);
+          }
+        } catch (err) {
+          console.warn(`[Keep-Alive] Ping failed:`, err);
+        }
+      }, KEEP_ALIVE_INTERVAL_MS);
+
+      console.log(`[Keep-Alive] Self-ping armed: every 14 min → ${selfUrl}/api/health`);
+    }
   });
 }
 

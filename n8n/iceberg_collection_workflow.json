@@ -186,7 +186,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "http://localhost:3000/api/iceberg/sync",
+        "url": "={{ $env.DSS_BACKEND_URL || 'http://localhost:3000' }}/api/iceberg/sync",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [

@@ -1,0 +1,96 @@
+# Render Blueprint — Antarctic DSS Full Stack
+# Deploy with: https://render.com/deploy → connect GitHub repo
+# Services: Node.js Backend + n8n Workflow Engine + Keep-Alive Cron
+
+services:
+  # ═══════════════════════════════════════════════
+  # 1. Main Backend (Node.js Express + WebSocket)
+  # ═══════════════════════════════════════════════
+  - type: web
+    name: antarctic-dss-backend
+    runtime: node
+    plan: free                # Change to "starter" ($7/mo) for always-on
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3000"
+      - key: AISSTREAM_API_KEY
+        sync: false           # Set manually in Render dashboard
+      - key: RENDER_EXTERNAL_URL
+        fromService:
+          name: antarctic-dss-backend
+          type: web
+          property: url       # Auto-injects the public URL for keep-alive ping
+
+  # ═══════════════════════════════════════════════
+  # 2. n8n Workflow Automation Engine
+  # ═══════════════════════════════════════════════
+  - type: web
+    name: antarctic-dss-n8n
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile.n8n
+    healthCheckPath: /healthz
+    envVars:
+      - key: N8N_PORT
+        value: "5678"
+      - key: N8N_BASIC_AUTH_ACTIVE
+        value: "true"
+      - key: N8N_BASIC_AUTH_USER
+        value: "admin"
+      - key: N8N_BASIC_AUTH_PASSWORD
+        sync: false           # Set manually in Render dashboard
+      - key: N8N_PROTOCOL
+        value: "https"
+      - key: N8N_HOST
+        fromService:
+          name: antarctic-dss-n8n
+          type: web
+          property: host
+      - key: WEBHOOK_URL
+        fromService:
+          name: antarctic-dss-n8n
+          type: web
+          property: url
+      - key: DSS_BACKEND_URL
+        fromService:
+          name: antarctic-dss-backend
+          type: web
+          property: url       # n8n workflow uses this to POST /api/iceberg/sync
+      - key: GENERIC_TIMEZONE
+        value: "UTC"
+
+  # ═══════════════════════════════════════════════
+  # 3. Keep-Alive Cron (Pings both services every 14 min)
+  # ═══════════════════════════════════════════════
+  - type: cron
+    name: antarctic-dss-keep-alive
+    runtime: node
+    plan: free
+    schedule: "*/14 * * * *"  # Every 14 minutes
+    buildCommand: echo "keep-alive pinger ready"
+    startCommand: |
+      node -e "
+        const urls = [
+          process.env.BACKEND_URL + '/api/health',
+          process.env.N8N_URL + '/healthz'
+        ];
+        Promise.all(urls.map(u =>
+          fetch(u).then(r => console.log('✅', u, r.status)).catch(e => console.warn('⚠️', u, e.message))
+        )).then(() => process.exit(0));
+      "
+    envVars:
+      - key: BACKEND_URL
+        fromService:
+          name: antarctic-dss-backend
+          type: web
+          property: url
+      - key: N8N_URL
+        fromService:
+          name: antarctic-dss-n8n
+          type: web
+          property: url
