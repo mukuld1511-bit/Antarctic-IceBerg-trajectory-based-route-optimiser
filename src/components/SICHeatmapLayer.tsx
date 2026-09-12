@@ -8,26 +8,26 @@ interface Props {
 }
 
 export const getSICColor = (sic: number): string => {
-  if (sic < 0.15) return "rgba(30, 75, 125, 0.25)";
-  if (sic < 0.35) return "rgba(56, 150, 200, 0.55)";
-  if (sic < 0.60) return "rgba(75, 205, 230, 0.75)";
-  if (sic < 0.80) return "rgba(160, 235, 245, 0.88)";
-  return "rgba(240, 250, 255, 0.95)";
+  if (sic < 0.15) return "rgba(45, 160, 215, 0.35)";
+  if (sic < 0.40) return "rgba(70, 190, 235, 0.60)";
+  if (sic < 0.70) return "rgba(135, 228, 253, 0.80)";
+  if (sic < 0.88) return "rgba(215, 248, 255, 0.92)";
+  return "rgba(255, 255, 255, 0.98)";
 };
 
 export const getSICTextColor = (sic: number): string => {
-  if (sic < 0.35) return "#0E7C93";
-  if (sic < 0.70) return "#0A5767";
-  return "#12202B";
+  if (sic < 0.40) return "#0284C7";
+  if (sic < 0.75) return "#0369A1";
+  return "#0F172A";
 };
 
 export const SICHeatmapLegend: React.FC = () => {
   const steps = [
-    { label: "Open Water (<15%)", color: "rgba(30, 75, 125, 0.4)" },
-    { label: "Open Pack (15-40%)", color: "rgba(56, 150, 200, 0.6)" },
-    { label: "Close Pack (40-70%)", color: "rgba(75, 205, 230, 0.8)" },
-    { label: "Consolidated (70-85%)", color: "rgba(160, 235, 245, 0.9)" },
-    { label: "Fast / Heavy Multi-year (>85%)", color: "rgba(245, 250, 255, 0.98)" },
+    { label: "Marginal Ice Zone (<15%)", color: "rgba(45, 160, 215, 0.50)" },
+    { label: "Open Pack (15-40%)", color: "rgba(70, 190, 235, 0.70)" },
+    { label: "Close Pack (40-70%)", color: "rgba(135, 228, 253, 0.85)" },
+    { label: "Consolidated Pack (70-88%)", color: "rgba(215, 248, 255, 0.94)" },
+    { label: "Fast Ice / Polar Shelf (>88%)", color: "rgba(255, 255, 255, 0.98)" },
   ];
 
   return (

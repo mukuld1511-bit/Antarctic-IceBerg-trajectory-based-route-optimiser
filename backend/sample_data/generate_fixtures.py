@@ -1,42 +1,107 @@
 """
 Generates representative synthetic fixtures for Antarctic Sea-Ice, Icebergs, and Bathymetry
-Target region: Weddell Sea / Dronning Maud Land (Bharati / Maitri transit corridors)
-Bounding box roughly 20°W to 60°W (and eastward to 15°E for Maitri approach), 60°S to 78°S.
+Target region: Maritime Antarctica (Peninsula, Weddell Sea, Dronning Maud Land / Maitri, Prydz Bay / Bharati)
+Bounding box: -75.0°W to +85.0°E, -58.0°S to -78.0°S.
 """
 import json
 import math
 import os
 
+def get_coastal_shelf_lat(lon):
+    """Latitude of the Antarctic continental shelf / fast-ice grounding line around all 360 degrees."""
+    if -60.0 <= lon < -15.0:
+        # Weddell Sea / Ronne-Filchner Ice Shelf (deepest embayment south to -78°S)
+        return -78.0 + abs(lon - (-40.0)) * 0.16
+    elif -15.0 <= lon < 30.0:
+        # Princess Martha & Astrid Coast (Maitri at 11.7°E, -70.77°S)
+        return -70.5 + math.sin(lon * 0.12) * 0.8
+    elif 30.0 <= lon < 65.0:
+        # Enderby & Kemp Land
+        return -67.5 + math.cos(lon * 0.08) * 0.7
+    elif 65.0 <= lon < 85.0:
+        # Prydz Bay & Amery Ice Shelf (Bharati at 76.2°E, -69.41°S)
+        return -70.0 - 2.5 * math.exp(-((lon - 73.0) / 6.0) ** 2)
+    elif 85.0 <= lon < 145.0:
+        # Wilkes Land / Terre Adélie
+        return -66.5 + math.sin((lon - 85.0) * 0.05) * 0.9
+    elif lon >= 145.0 or lon < -150.0:
+        # Ross Sea & Ross Ice Shelf embayment south to -78.5°S
+        norm_lon = lon if lon > 0 else lon + 360.0
+        return -78.5 + abs(norm_lon - 180.0) * 0.14
+    elif -150.0 <= lon < -75.0:
+        # Amundsen & Bellingshausen Seas (Thwaites / Pine Island)
+        return -72.5 + math.sin((lon + 110.0) * 0.06) * 1.2
+    else:
+        # Antarctic Peninsula spine (-75 to -60)
+        return -65.5 + (lon + 75.0) * 0.25
+
+def get_miz_edge_lat(lon, day=1):
+    """Marginal Ice Zone (MIZ) northern edge in Southern Ocean circum-polar cryosphere."""
+    day_shift = (day - 1) * 0.12
+    if -55.0 <= lon < -15.0:
+        base = -58.8 - 2.2 * math.sin((lon + 55.0) * math.pi / 40.0)
+    elif -15.0 <= lon < 30.0:
+        base = -61.2 - 1.4 * math.sin(lon * 0.08)
+    elif lon >= 145.0 or lon < -150.0:
+        base = -61.0 - 1.5 * math.sin(lon * 0.05)
+    else:
+        base = -62.0 - 1.0 * math.cos(lon * 0.08)
+
+    wave = 1.0 * math.sin(lon * 0.065 + day * 0.25) + 0.5 * math.cos(lon * 0.13)
+    return base + wave - day_shift
+
 def generate_sic_grid(lead_days=7):
-    # Latitudes: -60.0 to -78.0 with step 1.0
-    # Longitudes: -60.0 to 15.0 with step 2.5
-    lats = [round(-60.0 - i * 1.0, 1) for i in range(19)]
-    lons = [round(-60.0 + j * 2.5, 1) for j in range(31)]
-    
+    # Full circum-polar Antarctic coverage: all 360 degrees of longitude!
+    # Latitudes: -58.0 to -78.0 with step 1.0 (21 rows)
+    # Longitudes: -180.0 to +180.0 with step 3.0 (121 cols)
+    lats = [round(-58.0 - i * 1.0, 1) for i in range(21)]
+    lons = [round(-180.0 + j * 3.0, 1) for j in range(121)]
+
     forecasts = []
     for day in range(1, lead_days + 1):
         cells = []
         total_sic = 0.0
+
         for lat in lats:
             for lon in lons:
-                # Physics-informed synthetic sea-ice distribution:
-                # - High concentration near Ronne/Filchner Ice Shelf (-75 to -78S, -60 to -40W)
-                # - Coastal current gyre (Weddell Gyre) clockwise rotation
-                # - Decreases northward toward -60S
-                # - Day progression brings slight seasonal expansion + cyclonic deformation
-                dist_from_pole = (-lat - 60.0) / 18.0  # 0 at -60S, 1 at -78S
-                lon_factor = math.sin((lon + 60.0) * math.pi / 75.0) * 0.25
-                day_growth = day * 0.018
-                
-                base_sic = 0.92 * (dist_from_pole ** 1.3) + lon_factor + day_growth
-                # Add gyre eddy fluctuation
-                eddy = 0.08 * math.sin(lat * 0.8 + lon * 0.4 + day * 0.3)
-                sic_val = max(0.0, min(0.98, base_sic + eddy))
-                
-                # Confidence decreases with lead time
-                confidence = max(0.65, 0.96 - (day - 1) * 0.045 - abs(eddy) * 0.8)
-                thickness = round(max(0.1, sic_val * 2.2), 2) if sic_val > 0.15 else 0.0
-                
+                coast_lat = get_coastal_shelf_lat(lon)
+                miz_lat = get_miz_edge_lat(lon, day)
+
+                if lat > miz_lat:
+                    # North of Marginal Ice Zone
+                    if lat < miz_lat + 2.8:
+                        # Soft organic transition zone (brash ice filaments & floe ribbons)
+                        frac = 1.0 - (lat - miz_lat) / 2.8
+                        eddy = 0.04 * math.sin(lat * 2.5 + lon * 1.8 + day * 0.4)
+                        sic_val = max(0.0, 0.22 * (frac ** 1.8) + eddy)
+                        if sic_val < 0.05:
+                            sic_val = 0.0
+                    else:
+                        sic_val = 0.0
+                else:
+                    # Inside the Polar Ice Pack
+                    dist_into_pack = miz_lat - lat
+                    total_span = max(2.5, miz_lat - coast_lat)
+                    rel_depth = min(1.0, max(0.0, dist_into_pack / total_span))
+
+                    # Non-linear concentration gradient: fast ice at coast, loose pack at edge
+                    base_sic = 0.25 + 0.71 * (rel_depth ** 0.85)
+
+                    # Dynamic gyre eddy circulation
+                    eddy = 0.05 * math.sin(lat * 1.2 + lon * 0.6 + day * 0.3) + 0.03 * math.cos(lat * 0.8 - lon * 1.1)
+                    sic_val = max(0.10, min(0.98, base_sic + eddy))
+
+                    # Coastal fast-ice consolidation
+                    if rel_depth > 0.85 and lat <= coast_lat + 1.0:
+                        sic_val = max(0.90, sic_val)
+
+                    # Coastal polynyas (Prydz Bay / Ross / Weddell)
+                    if 69.0 <= lon <= 74.5 and -71.5 <= lat <= -68.8:
+                        sic_val = max(0.35, min(0.68, sic_val * 0.62))
+
+                confidence = max(0.65, 0.96 - (day - 1) * 0.045 - (0.05 if sic_val > 0 else 0.0))
+                thickness = round(max(0.1, sic_val * 2.4), 2) if sic_val > 0.12 else 0.0
+
                 cells.append({
                     "lat": lat,
                     "lon": lon,
@@ -45,7 +110,7 @@ def generate_sic_grid(lead_days=7):
                     "thickness_m": thickness
                 })
                 total_sic += sic_val
-        
+
         mean_sic = round(total_sic / len(cells), 3)
         forecasts.append({
             "lead_day": day,
@@ -53,11 +118,11 @@ def generate_sic_grid(lead_days=7):
             "mean_concentration": mean_sic,
             "grid_cells": cells
         })
-        
+
     return {
-        "region_name": "Weddell Sea / Dronning Maud Land (Maitri-Bharati Corridor)",
-        "lat_range": [-78.0, -60.0],
-        "lon_range": [-60.0, 15.0],
+        "region_name": "Circum-Antarctic Polar Cryosphere (360° Southern Ocean Coverage)",
+        "lat_range": [-78.0, -58.0],
+        "lon_range": [-180.0, 180.0],
         "lead_days": lead_days,
         "forecasts": forecasts
     }

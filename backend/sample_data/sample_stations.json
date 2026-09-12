@@ -22,193 +22,6 @@
     "coastal_access": "Prydz Bay"
   },
   {
-    "id": "dakshin_gangotri",
-    "name": "Dakshin Gangotri Historical Base (India)",
-    "lat": -70.0900,
-    "lon": 12.0000,
-    "country": "India",
-    "agency": "NCPOR / MoES",
-    "established": 1983,
-    "role": "Historic first Indian Antarctic base, Dronning Maud Land",
-    "coastal_access": "Ice Shelf Approach"
-  },
-  {
-    "id": "mcmurdo",
-    "name": "McMurdo Station (United States)",
-    "lat": -77.8460,
-    "lon": 166.6680,
-    "country": "United States",
-    "agency": "USAP / NSF",
-    "established": 1955,
-    "role": "Largest Antarctic research center, Ross Island",
-    "coastal_access": "Winter Quarters Bay, Ross Sea"
-  },
-  {
-    "id": "halley_vi",
-    "name": "Halley VI Research Station (UK)",
-    "lat": -75.5833,
-    "lon": -25.5000,
-    "country": "United Kingdom",
-    "agency": "British Antarctic Survey (BAS)",
-    "established": 2013,
-    "role": "Brunt Ice Shelf atmospheric observatory",
-    "coastal_access": "Weddell Sea coast"
-  },
-  {
-    "id": "rothera",
-    "name": "Rothera Research Station (UK)",
-    "lat": -67.5683,
-    "lon": -68.1250,
-    "country": "United Kingdom",
-    "agency": "British Antarctic Survey (BAS)",
-    "established": 1975,
-    "role": "Antarctic Peninsula logistics and biology research hub",
-    "coastal_access": "Adelaide Island, Marguerite Bay"
-  },
-  {
-    "id": "neumayer_iii",
-    "name": "Neumayer-Station III (Germany)",
-    "lat": -70.6667,
-    "lon": -8.2667,
-    "country": "Germany",
-    "agency": "Alfred Wegener Institute (AWI)",
-    "established": 2009,
-    "role": "Ekström Ice Shelf coastal observatory",
-    "coastal_access": "Atka Bay"
-  },
-  {
-    "id": "troll",
-    "name": "Troll Research Station (Norway)",
-    "lat": -72.0117,
-    "lon": 2.5350,
-    "country": "Norway",
-    "agency": "Norwegian Polar Institute",
-    "established": 1990,
-    "role": "Jutulsessen Nunatak atmospheric observatory",
-    "coastal_access": "Princess Martha Coast"
-  },
-  {
-    "id": "princess_elisabeth",
-    "name": "Princess Elisabeth Station (Belgium)",
-    "lat": -71.9500,
-    "lon": 23.3500,
-    "country": "Belgium",
-    "agency": "International Polar Foundation",
-    "established": 2009,
-    "role": "World's first zero-emission polar station",
-    "coastal_access": "Utsteinen Nunatak, Queen Maud Land"
-  },
-  {
-    "id": "casey",
-    "name": "Casey Station (Australia)",
-    "lat": -66.2822,
-    "lon": 110.5244,
-    "country": "Australia",
-    "agency": "Australian Antarctic Division (AAD)",
-    "established": 1969,
-    "role": "East Antarctic coastal base, Wilkes Land",
-    "coastal_access": "Vincennes Bay"
-  },
-  {
-    "id": "davis",
-    "name": "Davis Station (Australia)",
-    "lat": -68.5764,
-    "lon": 77.9672,
-    "country": "Australia",
-    "agency": "Australian Antarctic Division (AAD)",
-    "established": 1957,
-    "role": "Vestfold Hills ice-free oasis hub",
-    "coastal_access": "Prydz Bay"
-  },
-  {
-    "id": "mawson",
-    "name": "Mawson Station (Australia)",
-    "lat": -67.6042,
-    "lon": 62.8744,
-    "country": "Australia",
-    "agency": "Australian Antarctic Division (AAD)",
-    "established": 1954,
-    "role": "Oldest continuously operating Antarctic station south of Antarctic Circle",
-    "coastal_access": "Holme Bay"
-  },
-  {
-    "id": "showa",
-    "name": "Showa / Syowa Station (Japan)",
-    "lat": -69.0069,
-    "lon": 39.5828,
-    "country": "Japan",
-    "agency": "National Institute of Polar Research (NIPR)",
-    "established": 1957,
-    "role": "East Ongul Island research and upper atmosphere base",
-    "coastal_access": "Lützow-Holm Bay"
-  },
-  {
-    "id": "zhongshan",
-    "name": "Zhongshan Station (China)",
-    "lat": -69.3731,
-    "lon": 76.3783,
-    "country": "China",
-    "agency": "Polar Research Institute of China (PRIC)",
-    "established": 1989,
-    "role": "Larsemann Hills research laboratory",
-    "coastal_access": "Prydz Bay"
-  },
-  {
-    "id": "dumont_durville",
-    "name": "Dumont d'Urville Station (France)",
-    "lat": -66.6628,
-    "lon": 140.0014,
-    "country": "France",
-    "agency": "Institut Polaire Français (IPEV)",
-    "established": 1956,
-    "role": "Adélie Land biodiversity and glaciology base",
-    "coastal_access": "Île des Pétrels"
-  },
-  {
-    "id": "esperanza",
-    "name": "Base Esperanza (Argentina)",
-    "lat": -63.3967,
-    "lon": -56.9983,
-    "country": "Argentina",
-    "agency": "Instituto Antártico Argentino",
-    "established": 1952,
-    "role": "Permanent civilian settlement & research base",
-    "coastal_access": "Hope Bay, Trinity Peninsula"
-  },
-  {
-    "id": "frei",
-    "name": "Base Presidente Eduardo Frei (Chile)",
-    "lat": -62.1917,
-    "lon": -58.9767,
-    "country": "Chile",
-    "agency": "Instituto Antártico Chileno (INACH)",
-    "established": 1969,
-    "role": "King George Island gateway airport and aerodrome base",
-    "coastal_access": "Fildes Peninsula"
-  },
-  {
-    "id": "weddell_ronne",
-    "name": "Weddell Sea Continental Ice Shelf (Ronne)",
-    "lat": -75.0000,
-    "lon": -45.0000,
-    "country": "International Waters",
-    "agency": "Antarctic Treaty Area",
-    "established": 1980,
-    "role": "Oceanographic deep pack research & ice-coring corridor",
-    "coastal_access": "Ronne-Filchner Ice Shelf"
-  },
-  {
-    "id": "mormugao_goa",
-    "name": "Port of Mormugao, Goa (India)",
-    "lat": 15.4026,
-    "lon": 73.8016,
-    "country": "India",
-    "agency": "NCPOR Headquarters & Embarkation Port",
-    "established": 1888,
-    "role": "National Centre for Polar and Ocean Research Headquarters / Indian Flag-off Gateway",
-    "coastal_access": "Arabian Sea / Indian Ocean"
-  },
-  {
     "id": "cape_town",
     "name": "Port of Cape Town (South Africa)",
     "lat": -33.9249,
@@ -218,17 +31,6 @@
     "established": 1652,
     "role": "Primary departure port for Indian Antarctic Resupply (Maitri)",
     "coastal_access": "Atlantic Ocean"
-  },
-  {
-    "id": "durban",
-    "name": "Port of Durban (South Africa)",
-    "lat": -29.8587,
-    "lon": 31.0218,
-    "country": "South Africa",
-    "agency": "Gateway Port",
-    "established": 1824,
-    "role": "Indian Ocean gateway port for Southern Ocean expeditions",
-    "coastal_access": "Indian Ocean"
   },
   {
     "id": "punta_arenas",
@@ -242,69 +44,25 @@
     "coastal_access": "Strait of Magellan"
   },
   {
-    "id": "ushuaia",
-    "name": "Port of Ushuaia (Argentina)",
-    "lat": -54.8019,
-    "lon": -68.3030,
-    "country": "Argentina",
-    "agency": "Gateway Port",
-    "established": 1884,
-    "role": "Fin del Mundo - Southernmost city and premier Antarctic Peninsula gateway",
-    "coastal_access": "Beagle Channel"
+    "id": "halley_vi",
+    "name": "Halley VI Research Station (UK)",
+    "lat": -75.5833,
+    "lon": -25.5,
+    "country": "United Kingdom",
+    "agency": "British Antarctic Survey (BAS)",
+    "established": 2013,
+    "role": "Brunt Ice Shelf atmospheric observatory",
+    "coastal_access": "Weddell Sea coast"
   },
   {
-    "id": "hobart",
-    "name": "Port of Hobart (Australia)",
-    "lat": -42.8821,
-    "lon": 147.3272,
-    "country": "Australia",
-    "agency": "Gateway Port",
-    "established": 1804,
-    "role": "Southern Ocean & East Antarctic gateway hub for Bharati Station",
-    "coastal_access": "Tasman Sea / Southern Ocean"
-  },
-  {
-    "id": "lyttelton",
-    "name": "Port of Lyttelton / Christchurch (New Zealand)",
-    "lat": -43.6031,
-    "lon": 172.7194,
-    "country": "New Zealand",
-    "agency": "Gateway Port",
-    "established": 1849,
-    "role": "Historic and modern departure port for Ross Sea & McMurdo Base",
-    "coastal_access": "Pacific Ocean"
-  },
-  {
-    "id": "fremantle",
-    "name": "Port of Fremantle / Perth (Australia)",
-    "lat": -32.0569,
-    "lon": 115.7439,
-    "country": "Australia",
-    "agency": "Gateway Port",
-    "established": 1897,
-    "role": "Western Australian oceanic hub for Southern Ocean voyages",
-    "coastal_access": "Indian Ocean"
-  },
-  {
-    "id": "bremerhaven",
-    "name": "Port of Bremerhaven (Germany)",
-    "lat": 53.5417,
-    "lon": 8.5833,
+    "id": "neumayer_iii",
+    "name": "Neumayer-Station III (Germany)",
+    "lat": -70.6667,
+    "lon": -8.2667,
     "country": "Germany",
-    "agency": "Gateway Port / AWI Homeport",
-    "established": 1827,
-    "role": "Homeport of German research icebreaker RV Polarstern",
-    "coastal_access": "North Sea"
-  },
-  {
-    "id": "stanley",
-    "name": "Port Stanley (Falkland Islands)",
-    "lat": -51.6977,
-    "lon": -57.8517,
-    "country": "Falkland Islands",
-    "agency": "Gateway Port",
-    "established": 1843,
-    "role": "South Atlantic deep-sea staging base for British Antarctic Survey",
-    "coastal_access": "South Atlantic Ocean"
+    "agency": "Alfred Wegener Institute (AWI)",
+    "established": 2009,
+    "role": "Ekstr\u00f6m Ice Shelf coastal observatory",
+    "coastal_access": "Atka Bay"
   }
 ]

@@ -207,4 +207,9 @@ export interface LiveVessel {
   heading: number;
   shipType: number;
   lastUpdate: string; // ISO timestamp
+  callsign?: string;
+  flag?: string;
+  polarClass?: string;
+  destination?: string;
+  source?: string;
 }

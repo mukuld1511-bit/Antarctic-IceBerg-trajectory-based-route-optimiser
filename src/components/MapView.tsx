@@ -311,34 +311,61 @@ export const MapView: React.FC<MapViewProps> = ({
       if (v.lat === 0 && v.lon === 0) continue;
       if (!bounds.contains([v.lat, v.lon])) continue;
 
-      const color = getVesselColor(v.shipType);
+      const heading = v.heading || v.cog || 0;
+      const isResearchOrIcebreaker = (v as any).polarClass?.includes("PC") || v.shipType === 55 || v.name.includes("RATNA") || v.name.includes("AGULHAS") || v.name.includes("POLARSTERN") || v.name.includes("ATTENBOROUGH") || v.name.includes("FEDOROV") || v.name.includes("SHIRASE") || v.name.includes("ASTROLABE");
+      const isSar = v.shipType === 50 || v.name.includes("SAR");
+      const vesselColor = isResearchOrIcebreaker ? "#00F0FF" : isSar ? "#EF4444" : getVesselColor(v.shipType);
       const typeName = getVesselTypeName(v.shipType);
+      const flagStr = (v as any).flag ? `${(v as any).flag}` : "";
+      const polarClassStr = (v as any).polarClass || (isResearchOrIcebreaker ? "PC-4 (Polar Research Icebreaker)" : typeName);
+      const sourceStr = (v as any).source || "Satellite AIS";
+      const destStr = (v as any).destination || "Southern Ocean Transit";
 
-      // Canvas-rendered circleMarker — single shared renderer, no DOM overhead
-      const marker = L.circleMarker([v.lat, v.lon], {
-        radius: 5,
-        fillColor: color,
-        fillOpacity: 0.9,
-        color: "#fff",
-        weight: 1.2,
-        renderer: canvasRendererRef.current || L.canvas()
+      const iconHtml = `
+        <div style="position: relative; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; transform: translate(-50%, -50%);">
+          <!-- Directional Nautical Vessel Hull with True Heading Alignment -->
+          <svg width="26" height="26" viewBox="0 0 26 26" style="transform: rotate(${heading}deg); overflow: visible; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));">
+            <!-- Forward Velocity Course Vector -->
+            <line x1="13" y1="3" x2="13" y2="-9" stroke="${vesselColor}" stroke-width="2.0" stroke-linecap="round" />
+            <!-- Streamlined Polar Hull -->
+            <polygon points="13,2 20,10 18.5,23 7.5,23 6,10" fill="${vesselColor}" stroke="#FFFFFF" stroke-width="1.3" />
+            <!-- Bridge Conning Island -->
+            <rect x="10.5" y="12" width="5" height="7" fill="#0F172A" rx="1" />
+          </svg>
+          <!-- Tactical Polar Vessel Callsign Tag -->
+          <div style="position: absolute; top: 24px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-family: 'JetBrains Mono', monospace; font-size: 8px; font-weight: 700; color: #FFFFFF; background: rgba(15, 23, 42, 0.90); border: 1px solid ${vesselColor}; border-radius: 2px; padding: 0 3px; pointer-events: none; box-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+            ${(v as any).callsign || v.name.substring(0, 9)}
+          </div>
+        </div>
+      `;
+
+      const customShipIcon = L.divIcon({
+        html: iconHtml,
+        className: "custom-polar-ship-marker",
+        iconSize: [0, 0],
+        iconAnchor: [0, 0]
       });
 
+      const marker = L.marker([v.lat, v.lon], { icon: customShipIcon, zIndexOffset: 300 });
+
       marker.bindPopup(`
-        <div style="font-family: -apple-system, system-ui, sans-serif; font-size: 12px; min-width: 180px; padding: 4px;">
-          <div style="font-weight: 700; font-size: 13px; color: #12202B; margin-bottom: 4px;">${v.name || "UNKNOWN"}</div>
-          <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 6px;">
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: ${color};"></span>
-            <span style="color: #57707E; font-size: 11px;">${typeName}</span>
+        <div style="font-family: -apple-system, system-ui, sans-serif; font-size: 12px; min-width: 220px; padding: 6px; background: #0F172A; color: #F8FAFC; border-radius: 4px; border: 1px solid ${vesselColor};">
+          <div style="display: flex; align-items: center; justify-content: space-between; border-b: 1px solid #334155; padding-bottom: 4px; margin-bottom: 6px;">
+            <div style="font-weight: 800; font-size: 13px; color: ${vesselColor};">${v.name || "UNKNOWN"}</div>
+            <span style="font-size: 10px; color: #94A3B8; font-family: monospace;">${flagStr}</span>
           </div>
-          <table style="width: 100%; font-size: 11px; font-family: monospace; border-collapse: collapse;">
-            <tr><td style="color: #57707E; padding: 1px 4px;">MMSI</td><td style="color: #12202B; padding: 1px 4px; text-align: right;">${v.mmsi}</td></tr>
-            <tr><td style="color: #57707E; padding: 1px 4px;">SOG</td><td style="color: #12202B; padding: 1px 4px; text-align: right;">${v.sog.toFixed(1)} kts</td></tr>
-            <tr><td style="color: #57707E; padding: 1px 4px;">COG</td><td style="color: #12202B; padding: 1px 4px; text-align: right;">${v.cog.toFixed(1)}°</td></tr>
-            <tr><td style="color: #57707E; padding: 1px 4px;">HDG</td><td style="color: #12202B; padding: 1px 4px; text-align: right;">${v.heading > 0 ? v.heading.toFixed(0) + "°" : "N/A"}</td></tr>
-            <tr><td style="color: #57707E; padding: 1px 4px;">POS</td><td style="color: #0E7C93; padding: 1px 4px; text-align: right;">${Math.abs(v.lat).toFixed(3)}°${v.lat < 0 ? "S" : "N"}, ${Math.abs(v.lon).toFixed(3)}°${v.lon < 0 ? "W" : "E"}</td></tr>
+          <div style="display: inline-block; font-size: 10px; background: ${vesselColor}22; color: ${vesselColor}; border: 1px solid ${vesselColor}55; border-radius: 2px; padding: 1px 5px; font-weight: 600; margin-bottom: 6px;">
+            ${polarClassStr}
+          </div>
+          <table style="width: 100%; font-size: 11px; font-family: monospace; border-collapse: collapse; margin-bottom: 6px;">
+            <tr><td style="color: #94A3B8; padding: 2px 0;">MMSI</td><td style="color: #F8FAFC; text-align: right;">${v.mmsi}</td></tr>
+            <tr><td style="color: #94A3B8; padding: 2px 0;">SOG (Speed)</td><td style="color: #38BDF8; font-weight: bold; text-align: right;">${v.sog.toFixed(1)} kts</td></tr>
+            <tr><td style="color: #94A3B8; padding: 2px 0;">COG / HDG</td><td style="color: #F8FAFC; text-align: right;">${v.cog.toFixed(0)}° / ${heading > 0 ? heading.toFixed(0) + "°" : "N/A"}</td></tr>
+            <tr><td style="color: #94A3B8; padding: 2px 0;">COORDINATES</td><td style="color: #00F0FF; text-align: right;">${Math.abs(v.lat).toFixed(2)}°S, ${Math.abs(v.lon).toFixed(2)}°${v.lon >= 0 ? "E" : "W"}</td></tr>
+            <tr><td style="color: #94A3B8; padding: 2px 0;">DESTINATION</td><td style="color: #F8FAFC; text-align: right;">${destStr}</td></tr>
+            <tr><td style="color: #94A3B8; padding: 2px 0;">TRACK SENSOR</td><td style="color: #A7F3D0; font-size: 10px; text-align: right;">${sourceStr}</td></tr>
           </table>
-          <div style="margin-top: 4px; font-size: 10px; color: #94A3B8;">Updated: ${new Date(v.lastUpdate).toLocaleTimeString()}</div>
+          <div style="font-size: 9px; color: #64748B; text-align: right; border-top: 1px solid #1E293B; padding-top: 3px;">Telemetry synced: ${new Date(v.lastUpdate).toLocaleTimeString()}</div>
         </div>
       `);
       marker.addTo(group);
@@ -450,36 +477,43 @@ export const MapView: React.FC<MapViewProps> = ({
         );
         wakeLine.addTo(group);
 
-        // Initial launch position ghost dot
-        const originMarker = L.circleMarker([berg.current_lat, berg.current_lon], {
-          radius: 3,
-          fillColor: hazardColor,
-          fillOpacity: 0.35,
-          color: hazardColor,
-          weight: 1
-        });
+        // Subtle launch origin ghost mark
+        const originMarker = L.polyline(
+          [[berg.current_lat - 0.05, berg.current_lon], [berg.current_lat + 0.05, berg.current_lon]],
+          { color: hazardColor, weight: 1, opacity: 0.4 }
+        );
         originMarker.addTo(group);
       }
 
-      // 1. Maritime Safety Exclusion Buffer Zone (Translucent Hazard Envelope)
-      const baseBufferMeters = isMegaberg ? 18000 : berg.size_class === "C" ? 9000 : 4500;
-      const bufferRadiusMeters = baseBufferMeters * uncertaintyScaleMultiplier;
-      const bufferCircle = L.circle([activeLat, activeLon], {
-        radius: bufferRadiusMeters,
-        color: hazardColor,
-        weight: isSelected ? 2 : 1,
-        dashArray: "3, 5",
-        fillColor: hazardColor,
-        fillOpacity: isSelected ? 0.15 : 0.05
-      });
-      bufferCircle.bindTooltip(
-        `<div class="text-[10px] font-mono p-1 bg-[#FFFFFF] text-[#12202B] border border-[#D7E1E8] rounded-none shadow">
-          <div class="font-bold text-[${hazardColor}]">⚠️ EXCLUSION ENVELOPE: ${(bufferRadiusMeters / 1852).toFixed(1)} NM</div>
-          <div class="text-[9px] text-[#57707E]">${berg.iceberg_id} (${berg.name}) Uncertainty Buffer (Day +${currentLeadDay})</div>
-        </div>`,
-        { sticky: true }
-      );
-      bufferCircle.addTo(group);
+      // 1. Forward Kinematic Drift Sector Cone (No Circles! Directional hazard corridor)
+      if (isSelected) {
+        const coneDistDeg = 0.65 + (currentLeadDay / 7.0) * 0.45;
+        const spreadRad = (18 * Math.PI) / 180;
+        const cosL = Math.max(0.2, Math.cos((activeLat * Math.PI) / 180));
+        const leftLat = activeLat + coneDistDeg * Math.cos(headingRad - spreadRad);
+        const leftLon = activeLon + (coneDistDeg * Math.sin(headingRad - spreadRad)) / cosL;
+        const rightLat = activeLat + coneDistDeg * Math.cos(headingRad + spreadRad);
+        const rightLon = activeLon + (coneDistDeg * Math.sin(headingRad + spreadRad)) / cosL;
+
+        const forwardCone = L.polygon(
+          [[activeLat, activeLon], [leftLat, leftLon], [rightLat, rightLon]],
+          {
+            color: hazardColor,
+            weight: 1.5,
+            dashArray: "4, 4",
+            fillColor: hazardColor,
+            fillOpacity: 0.14
+          }
+        );
+        forwardCone.bindTooltip(
+          `<div class="text-[10px] font-mono p-1 bg-[#FFFFFF] text-[#12202B] border border-[#D7E1E8] rounded-none shadow">
+            <div class="font-bold text-[${hazardColor}]">▲ DRIFT CORRIDOR: ${berg.iceberg_id}</div>
+            <div class="text-[9px] text-[#57707E]">Directional Forward Sector (D+${currentLeadDay})</div>
+          </div>`,
+          { sticky: true }
+        );
+        forwardCone.addTo(group);
+      }
 
       // 2. Drift Direction Heading Vector (showing real drift course & velocity)
       const arrowLenDeg = 0.25 + Math.min(0.35, ((berg.drift_speed_knots || 1.0) / 2.0) * 0.25);
@@ -490,9 +524,9 @@ export const MapView: React.FC<MapViewProps> = ({
         [[activeLat, activeLon], [headingEndLat, headingEndLon]],
         {
           color: hazardColor,
-          weight: 2,
-          opacity: isSelected ? 1 : 0.75,
-          dashArray: "2, 4"
+          weight: isSelected ? 2.5 : 1.4,
+          opacity: isSelected ? 0.95 : 0.45,
+          dashArray: isSelected ? "4, 3" : "3, 5"
         }
       );
       driftVectorLine.addTo(group);
