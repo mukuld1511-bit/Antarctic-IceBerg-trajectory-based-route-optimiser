@@ -18,6 +18,8 @@ services:
         value: production
       - key: PORT
         value: "3000"
+      - key: NPM_CONFIG_PRODUCTION
+        value: "false"        # Install devDependencies too (esbuild, typescript needed for build)
       - key: AISSTREAM_API_KEY
         sync: false           # Set manually in Render dashboard
       - key: RENDER_EXTERNAL_URL
