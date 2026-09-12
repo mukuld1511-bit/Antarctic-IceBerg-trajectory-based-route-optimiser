@@ -7,9 +7,10 @@ import {
   LiveVessel
 } from "../types";
 
-// In production (Vercel), set VITE_API_BASE_URL to the deployed backend URL (e.g. https://antarctic-dss.onrender.com)
-// In local dev, leave empty — relative paths proxy through the Vite dev server
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
+// API_BASE is empty — works in both environments:
+// Local dev: Express server serves API directly on same port
+// Vercel prod: vercel.json rewrites /api/* → Render backend
+const API_BASE = "";
 
 export async function fetchDashboardSummary(): Promise<DashboardSummary> {
   const res = await fetch(`${API_BASE}/api/dashboard/summary`);
