@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://antarctic-iceberg-trajectory-based-route.onrender.com/api/:path*"
+      "destination": "https://antarctic-iceberg-trajectory-based-route-76tf.onrender.com/api/:path*"
     }
   ]
 }
